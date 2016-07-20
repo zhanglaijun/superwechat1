@@ -61,7 +61,7 @@ public interface I {
 //	String AVATAR_PATH 								= 		"E:/test/";
     String QUESTION 									= 		"?";							//问号
 	String EQUALS 										= 		"=";							//等号
-
+    String MSG_PREFIX_MSG                            =         "msg_";
 	String SERVER_ROOT                              =      "http://localhost:8888/SuperWeChatServer/Server?";
 	String ISON8859_1 								= 		"iso8859-1";
 	String UTF_8 									= 		"utf-8";

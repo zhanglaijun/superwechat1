@@ -17,6 +17,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,10 +28,12 @@ import com.easemob.EMError;
 import com.easemob.chat.EMChatManager;
 import com.easemob.exceptions.EaseMobException;
 
-import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatApplication;
+import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.setListener.OnSetAvatarListener;
+import cn.ucai.superwechat.utils.OkHttpUtils2;
 
 /**
  * 注册页
@@ -45,6 +48,10 @@ public class RegisterActivity extends BaseActivity {
 	ImageView imAvatar;
 	OnSetAvatarListener mOnSetAvatarListener;
 	String avatarName;
+	String TAG="main";
+	String username;
+	String nick;
+	String pwd;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +109,9 @@ public class RegisterActivity extends BaseActivity {
 	 * @param view
 	 */
 	public void register(View view) {
-		final String username = userNameEditText.getText().toString().trim();
-		final String nick = nickNameEditText.getText().toString().trim();
-		final String pwd = passwordEditText.getText().toString().trim();
+		  username = userNameEditText.getText().toString().trim();
+		  nick = nickNameEditText.getText().toString().trim();
+		  pwd = passwordEditText.getText().toString().trim();
 		String confirm_pwd = confirmPwdEditText.getText().toString().trim();
 		if (TextUtils.isEmpty(username)) {
 			Toast.makeText(this, getResources().getString(R.string.User_name_cannot_be_empty), Toast.LENGTH_SHORT).show();
@@ -152,6 +159,7 @@ public class RegisterActivity extends BaseActivity {
 							}
 						});
 					} catch (final EaseMobException e) {
+						unRegiserAppServer();
 						runOnUiThread(new Runnable() {
 							public void run() {
 								if (!RegisterActivity.this.isFinishing())
@@ -175,6 +183,25 @@ public class RegisterActivity extends BaseActivity {
 			}).start();
 
 		}
+	}
+
+	private void unRegiserAppServer() {
+		OkHttpUtils2<Result>utils2=new OkHttpUtils2<Result>();
+		utils2.setRequestUrl(I.REQUEST_UNREGISTER)
+				.addParam(I.User.USER_NAME,username)
+				.targetClass(Result.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<Result>() {
+					@Override
+					public void onSuccess(Result result) {
+						Log.e(TAG,"tresult:"+result);
+					}
+
+					@Override
+					public void onError(String error) {
+						Log.e(TAG,error);
+
+					}
+				});
 	}
 
 	public void back(View view) {
