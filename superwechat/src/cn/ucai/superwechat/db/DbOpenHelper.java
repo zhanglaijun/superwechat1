@@ -57,7 +57,7 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 			+ UserDao.USER_TABLE_NAME + " ("
 			+ UserDao.USER_COLUMN_NAME_ID + " TEXT PRIMARY KEY, "
 			+ UserDao.USER_COLUMN_NAME_NICK + " TEXT, "
-			+ UserDao.USER_COLUMN_NAME_AVATAR + " TEXT,"
+			+ UserDao.USER_COLUMN_NAME_AVATAR + " INTEGER,"
 			+ UserDao.USER_COLUMN_NAME_AVATAR_TYPE +"INTEGER,"
 			+ UserDao.USER_COLUMN_NAME_AVATAR_PAHT +"TEXT,"
 			+ UserDao.USER_COLUMN_NAME_AVATAR_LAST_UPDATE_TIME + " TEXT);";

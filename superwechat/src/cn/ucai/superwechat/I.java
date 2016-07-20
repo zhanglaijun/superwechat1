@@ -59,7 +59,10 @@ public interface I {
 	}
 
 //	String AVATAR_PATH 								= 		"E:/test/";
-	String SERVER_PATH                              =      "http://localhost:8888/SuperWeChatServer/Server?";
+    String QUESTION 									= 		"?";							//问号
+	String EQUALS 										= 		"=";							//等号
+
+	String SERVER_ROOT                              =      "http://localhost:8888/SuperWeChatServer/Server?";
 	String ISON8859_1 								= 		"iso8859-1";
 	String UTF_8 									= 		"utf-8";
 	String PAGE_ID 									= 		"page_id";						//分页的起始下标
