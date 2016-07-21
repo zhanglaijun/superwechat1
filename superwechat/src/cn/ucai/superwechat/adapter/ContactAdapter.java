@@ -195,9 +195,9 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 			if(mOriginalList==null){
 			    mOriginalList = new ArrayList<User>();
 			}
-			EMLog.d(TAG, "contacts original size: " + mOriginalList.size());
-			EMLog.d(TAG, "contacts copy size: " + copyUserList.size());
-			
+			Log.e(TAG, "contacts original size: " + mOriginalList.size());
+			Log.e(TAG, "contacts copy size: " + copyUserList.size());
+			Log.e(TAG,"prefix="+prefix);
 			if(prefix==null || prefix.length()==0){
 				results.values = copyUserList;
 				results.count = copyUserList.size();
@@ -209,10 +209,9 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 					final User user = mOriginalList.get(i);
 					String username = user.getUsername();
 					
-					if(username.startsWith(prefixString)){
+					if(username.contains(prefixString)){
 						if(!username.equals(Constant.GROUP_USERNAME)&&
 								!username.equals(Constant.NEW_FRIENDS_USERNAME)){
-
 							newValues.add(user);
 						}
 					}
