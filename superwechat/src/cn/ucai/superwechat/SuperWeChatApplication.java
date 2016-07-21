@@ -19,6 +19,7 @@ import android.content.Context;
 import com.easemob.EMCallBack;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import cn.ucai.superwechat.bean.UserAvatar;
 
@@ -130,5 +131,14 @@ public class SuperWeChatApplication extends Application {
 
 	public void setUser(UserAvatar user) {
 		this.user = user;
+	}
+	private Map<String,UserAvatar> userMap;
+
+	public Map<String, UserAvatar> getUserMap() {
+		return userMap;
+	}
+
+	public void setUserMap(Map<String, UserAvatar> userMap) {
+		this.userMap = userMap;
 	}
 }
