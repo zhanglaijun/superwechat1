@@ -30,6 +30,11 @@ public class UserAvatar {
 		this.mavatarLastUpdateTime = mavatarLastUpdateTime;
 	}
 
+	public UserAvatar(String username) {
+		this.muserName=username;
+
+	}
+
 	public String getMUserName() {
 		return muserName;
 	}
