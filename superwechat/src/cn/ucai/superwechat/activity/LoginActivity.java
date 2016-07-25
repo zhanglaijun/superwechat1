@@ -189,6 +189,7 @@ public class LoginActivity extends BaseActivity {
 					@Override
 					public void onSuccess(String str) {
 						Result result = Utils.getResultFromJson(str, UserAvatar.class);
+						Log.i("main", result.toString());
 						if (result != null & result.isRetMsg()) {
 							UserAvatar user = (UserAvatar) result.getRetData();
 							if (user != null) {
