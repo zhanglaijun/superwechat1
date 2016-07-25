@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#eff2f6"
-    android:id="@+id/activity_register"
+    android:id="@+id/layout_register"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -212,7 +212,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_login_bg"
-                android:onClick="register"
                 android:paddingBottom="7dp"
                 android:paddingTop="7dp"
                 android:text="@string/register"

@@ -13,6 +13,9 @@
  */
 package cn.ucai.superwechat.adapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,15 +29,12 @@ import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.easemob.util.EMLog;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.utils.UserUtils;
+
+import com.easemob.util.EMLog;
 
 /**
  * 简单的好友Adapter实现
@@ -122,8 +122,8 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 			holder.avatar.setImageResource(R.drawable.groups_icon);
 		}else{
 //		    holder.nameTextview.setText(user.getNick());
-			UserUtils.setAppUserNick(username,holder.nameTextview);
-			//设置用户头像
+			UserUtils.setAppUserNick(username, holder.nameTextview);
+			//设置用户头像(设置用户联系人头像)
 			UserUtils.setAppUserAvatar(getContext(), username, holder.avatar);
 			if(holder.unreadMsgView != null)
 			    holder.unreadMsgView.setVisibility(View.INVISIBLE);
@@ -195,9 +195,9 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 			if(mOriginalList==null){
 			    mOriginalList = new ArrayList<User>();
 			}
-			Log.e(TAG, "contacts original size: " + mOriginalList.size());
-			Log.e(TAG, "contacts copy size: " + copyUserList.size());
-			Log.e(TAG,"prefix="+prefix);
+			EMLog.d(TAG, "contacts original size: " + mOriginalList.size());
+			EMLog.d(TAG, "contacts copy size: " + copyUserList.size());
+			
 			if(prefix==null || prefix.length()==0){
 				results.values = copyUserList;
 				results.count = copyUserList.size();
@@ -208,10 +208,9 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 				for(int i=0;i<count;i++){
 					final User user = mOriginalList.get(i);
 					String username = user.getUsername();
-					
+					// 将原代码中的startWith改为contains，就是以。。。开始改为包含。。。
 					if(username.contains(prefixString)){
-						if(!username.equals(Constant.GROUP_USERNAME)&&
-								!username.equals(Constant.NEW_FRIENDS_USERNAME)){
+						if (!username.equals(Constant.GROUP_USERNAME)&&!username.equals(Constant.NEW_FRIENDS_USERNAME)){
 							newValues.add(user);
 						}
 					}

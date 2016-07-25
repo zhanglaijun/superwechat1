@@ -30,19 +30,18 @@ import com.easemob.exceptions.EaseMobException;
 
 import java.io.File;
 
-import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.bean.Result;
-import cn.ucai.superwechat.setListener.OnSetAvatarListener;
-import cn.ucai.superwechat.utils.OkHttpUtils2;
+import cn.ucai.superwechat.data.OkHttpUtils2;
+import cn.ucai.superwechat.listener.OnSetAvatarListener;
+import cn.ucai.superwechat.utils.I;
 
 /**
  * 注册页
- * 
+ *
  */
 public class RegisterActivity extends BaseActivity {
-	private final static String TAG=RegisterActivity.class.getSimpleName();
 	private EditText userNameEditText;
 	private EditText nickNameEditText;
 	private EditText passwordEditText;
@@ -75,14 +74,14 @@ public class RegisterActivity extends BaseActivity {
 		findViewById(R.id.btn_register).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				register(view);
+				register();
 			}
 		});
 
 		findViewById(R.id.avatar).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				mOnSetAvatarListener = new OnSetAvatarListener(RegisterActivity.this, R.id.activity_register, avatarName, I.AVATAR_TYPE_USER_PATH);
+				mOnSetAvatarListener = new OnSetAvatarListener(RegisterActivity.this, R.id.layout_register, avatarName, I.AVATAR_TYPE_USER_PATH);
 			}
 		});
 
@@ -110,9 +109,9 @@ public class RegisterActivity extends BaseActivity {
 	/**
 	 * 注册
 	 *
-	 * @param view
+	 * @param
 	 */
-	public void register(View view) {
+	public void register() {
 		username = userNameEditText.getText().toString().trim();
 		nick = nickNameEditText.getText().toString().trim();
 		pwd = passwordEditText.getText().toString().trim();

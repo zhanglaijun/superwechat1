@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import cn.ucai.superwechat.bean.Pager;
+import cn.ucai.superwechat.bean.Result;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -15,9 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import cn.ucai.superwechat.I;
-import cn.ucai.superwechat.bean.Pager;
-import cn.ucai.superwechat.bean.Result;
 
 /**
  * Created by clawpo on 16/3/28.
@@ -76,7 +75,7 @@ public class Utils {
 //    }
 
 
-    public static <T> Result getResultFromJson(String jsonStr,Class<T> clazz){
+    public static <T> Result getResultFromJson(String jsonStr, Class<T> clazz){
         Result result = new Result();
         try {
             JSONObject jsonObject = new JSONObject(jsonStr);

@@ -15,6 +15,7 @@ package cn.ucai.superwechat.activity;
 
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -45,7 +46,7 @@ public class ChatRoomActivity extends BaseActivity {
 		setContentView(R.layout.fragment_chatroom);
 
 		instance = this;
-		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+		inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		roomList = EMChatManager.getInstance().getAllChatRooms();
 		chatListView = (ListView) findViewById(R.id.list);
 		chatRoomAdapter = new ChatRoomAdapter(this, 1, roomList);

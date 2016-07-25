@@ -1,6 +1,7 @@
 package cn.ucai.superwechat.activity;
 
-import android.app.AlertDialog;
+import java.io.ByteArrayOutputStream;
+
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -21,16 +22,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.EMValueCallBack;
+import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
-import com.squareup.picasso.Picasso;
-
-import java.io.ByteArrayOutputStream;
-
 import cn.ucai.superwechat.DemoHXSDKHelper;
 import cn.ucai.superwechat.R;
-import cn.ucai.superwechat.applib.controller.HXSDKHelper;
+import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.utils.UserUtils;
+import com.squareup.picasso.Picasso;
 
 public class UserProfileActivity extends BaseActivity implements OnClickListener{
 	
@@ -76,15 +75,17 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			headPhotoUpdate.setVisibility(View.GONE);
 			iconRightArrow.setVisibility(View.INVISIBLE);
 		}
-		if (username == null) {
+		if (username == null||username.equals(EMChatManager.getInstance().getCurrentUser())) {
+			String userName = SuperWeChatApplication.getInstance().getUserName();
+			tvUsername.setText(userName);
+			UserUtils.setAppCurrentUserNick(tvNickName);
+			UserUtils.setAppUserAvatar(this,userName,headAvatar);
+		} /*else if (username.equals(EMChatManager.getInstance().getCurrentUser())) {
+			String userName = SuperWeChatApplication.getInstance().getUserName();
 			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
-			UserUtils.setCurrentUserNick(tvNickName);
-			UserUtils.setCurrentUserAvatar(this, headAvatar);
-		} else if (username.equals(EMChatManager.getInstance().getCurrentUser())) {
-			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
-			UserUtils.setCurrentUserNick(tvNickName);
-			UserUtils.setCurrentUserAvatar(this, headAvatar);
-		} else {
+			UserUtils.setAppCurrentUserNick(tvNickName);
+			UserUtils.setAppUserAvatar(this, userName, headAvatar);
+		}*/ else {
 			tvUsername.setText(username);
 			UserUtils.setAppUserNick(username, tvNickName);
 			UserUtils.setAppUserAvatar(this, username, headAvatar);
@@ -100,7 +101,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			break;
 		case R.id.rl_nickname:
 			final EditText editText = new EditText(this);
-			new AlertDialog.Builder(this).setTitle(R.string.setting_nickname).setIcon(android.R.drawable.ic_dialog_info).setView(editText)
+			new Builder(this).setTitle(R.string.setting_nickname).setIcon(android.R.drawable.ic_dialog_info).setView(editText)
 					.setPositiveButton(R.string.dl_ok, new DialogInterface.OnClickListener() {
 
 						@Override
@@ -121,7 +122,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 	}
 	
 	public void asyncFetchUserInfo(String username){
-		((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().asyncGetUserInfo(username, new EMValueCallBack<User>() {
+		((DemoHXSDKHelper) HXSDKHelper.getInstance()).getUserProfileManager().asyncGetUserInfo(username, new EMValueCallBack<User>() {
 			
 			@Override
 			public void onSuccess(User user) {
@@ -145,7 +146,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 	
 	
 	private void uploadHeadPhoto() {
-		AlertDialog.Builder builder = new Builder(this);
+		Builder builder = new Builder(this);
 		builder.setTitle(R.string.dl_title_upload_photo);
 		builder.setItems(new String[] { getString(R.string.dl_msg_take_photo), getString(R.string.dl_msg_local_upload) },
 				new DialogInterface.OnClickListener() {

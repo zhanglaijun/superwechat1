@@ -5,47 +5,42 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
-import cn.ucai.superwechat.DemoHXSDKHelper;
-import cn.ucai.superwechat.R;
-import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.applib.controller.HXSDKHelper;
+import cn.ucai.superwechat.DemoHXSDKHelper;
+import cn.ucai.superwechat.SuperWeChatApplication;
+
+import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.bean.UserAvatar;
 import cn.ucai.superwechat.domain.User;
+import com.squareup.picasso.Picasso;
 
 public class UserUtils {
     /**
-		 * 根据username获取相应user，由于demo没有真实的用户数据，这里给的模拟的数据；
-		 * @param username
-		 * @return
-		 */
-	public static User getUserInfo(String username){
-		User user = ((DemoHXSDKHelper) HXSDKHelper.getInstance()).getContactList().get(username);
-		if(user == null){
-			user = new User(username);
-		}
-
-		if(user != null){
-			//demo没有这些数据，临时填充
-			if(TextUtils.isEmpty(user.getNick()))
-				user.setNick(username);
-		}
-		return user;
+     * 根据username获取相应user，由于demo没有真实的用户数据，这里给的模拟的数据；
+     * @param username
+     * @return
+     */
+    public static User getUserInfo(String username){
+        User user = ((DemoHXSDKHelper) HXSDKHelper.getInstance()).getContactList().get(username);
+        if(user == null){
+            user = new User(username);
+        }
+            
+        if(user != null){
+            //demo没有这些数据，临时填充
+        	if(TextUtils.isEmpty(user.getNick()))
+        		user.setNick(username);
+        }
+        return user;
     }
-	/**
-	 * 根据username获取相应user，由于demo没有真实的用户数据，这里给的模拟的数据；
-	 * @param username
-	 * @return
-	 */
-	public static UserAvatar getAppUserInfo(String username) {
-		UserAvatar user = SuperWeChatApplication.getInstance().getUserMap().get(username);
-		if (user == null) {
-			user = new UserAvatar();
-		}
-
-		return user;
-	}
+    public static UserAvatar getAppUserInfo(String username){
+        UserAvatar user = SuperWeChatApplication.getInstance().getUserMap().get(username);
+        if(user == null){
+            user = new UserAvatar(username);
+        }
+        return user;
+    }
+    
     /**
      * 设置用户头像
      * @param username
@@ -58,7 +53,30 @@ public class UserUtils {
             Picasso.with(context).load(R.drawable.default_avatar).into(imageView);
         }
     }
-    
+    /**
+     * 设置用户联系人头像
+     * @param username
+     */
+    public static void setAppUserAvatar(Context context, String username, ImageView imageView){
+        String path = "";
+        if(path != null && username != null){
+            path = getUserAvatarPath(username);
+            Picasso.with(context).load(path).placeholder(R.drawable.default_avatar).into(imageView);
+        }else{
+            Picasso.with(context).load(R.drawable.default_avatar).into(imageView);
+        }
+    }
+
+    private static String getUserAvatarPath(String username) {
+        StringBuilder path = new StringBuilder(I.SERVER_TOOL);
+        path.append(I.QUESTION).append(I.KEY_REQUEST)
+                .append(I.EQUALS).append(I.REQUEST_DOWNLOAD_AVATAR)
+                .append(I.AND).append(I.NAME_OR_HXID).append(I.EQUALS)
+                .append(username).append(I.AND).append(I.AVATAR_TYPE)
+                .append(I.EQUALS).append(I.AVATAR_TYPE_USER_PATH);
+        return path.toString();
+    }
+
     /**
      * 设置当前用户头像
      */
@@ -70,6 +88,13 @@ public class UserUtils {
 			Picasso.with(context).load(R.drawable.default_avatar).into(imageView);
 		}
 	}
+    /**
+     * 设置当前用户头像
+     */
+    public static void setAppCurrentUserAvatar(Context context, ImageView imageView) {
+        String userName = SuperWeChatApplication.getInstance().getUserName();
+        setAppUserAvatar(context,userName,imageView);
+    }
     
     /**
      * 设置用户昵称
@@ -82,24 +107,7 @@ public class UserUtils {
     		textView.setText(username);
     	}
     }
-    /**
-     * 设置用户昵称
-     */
-    public static void setAppUserNick(String username,TextView textView){
-    	UserAvatar user = getAppUserInfo(username);
-    	if(user != null){
-			if(user.getMUserNick()!=null){
-
-				textView.setText(user.getMUserNick());
-			}
-			else {
-				textView.setText(username);
-			}
-    	}else{
-    		textView.setText(username);
-    	}
-    }
-
+    
     /**
      * 设置当前用户昵称
      */
@@ -109,10 +117,23 @@ public class UserUtils {
     		textView.setText(user.getNick());
     	}
     }
-    
+    /**
+     * 设置当前用户昵称
+     */
+    public static void setAppCurrentUserNick(TextView textView){
+        UserAvatar user = SuperWeChatApplication.getInstance().getUser();
+        if (textView != null && user != null) {
+            if (user.getMUserNick() != null) {
+                textView.setText(user.getMUserNick());
+            } else {
+                textView.setText(user.getMUserName());
+            }
+        }
+    }
+
     /**
      * 保存或更新某个用户
-     * @param
+     * @param newUser
      */
 	public static void saveUserInfo(User newUser) {
 		if (newUser == null || newUser.getUsername() == null) {
@@ -120,5 +141,29 @@ public class UserUtils {
 		}
 		((DemoHXSDKHelper) HXSDKHelper.getInstance()).saveContact(newUser);
 	}
-    
+
+    /**
+     * 设置用户好友昵称
+     * @param username
+     * @param nameTextview
+     */
+    public static void setAppUserNick(String username, TextView nameTextview) {
+        UserAvatar user = getAppUserInfo(username);
+       setAppUserNick(user,nameTextview);
+    }
+    /**
+     * 设置用户昵称
+     * @param user
+     * @param nameTextview
+     */
+    public static void setAppUserNick(UserAvatar user, TextView nameTextview) {
+        if (user != null) {
+            if (user.getMUserNick() != null) {
+                nameTextview.setText(user.getMUserNick());
+            } else {
+                nameTextview.setText(user.getMUserName());
+            }
+        }
+    }
+
 }

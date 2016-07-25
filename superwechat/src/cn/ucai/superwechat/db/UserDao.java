@@ -41,11 +41,10 @@ public class UserDao {
 	public static final String USER_COLUMN_NAME_ID = "muserName";
 	public static final String USER_COLUMN_NAME_NICK = "muserNick";
 	public static final String USER_COLUMN_NAME_AVATAR = "mavatarId";
-	public static final String USER_COLUMN_NAME_AVATAR_TYPE="mavatarTye";
-	public static final String USER_COLUMN_NAME_AVATAR_PAHT="mavatarPath";
-	public static final String USER_COLUMN_NAME_AVATAR_LAST_UPDATE_TIME="mavatarLastUpdateTime";
+	public static final String USER_COLUMN_AVATAR_PATH = "mavatarPath";
+	public static final String USER_COLUMN_AVATAR_TYPE = "mavatarType";
+	public static final String USER_COLUMN_AVATAR_LAST_UPDATE_TIME = "mavatarLastUpdateTime";
 
-	
 	public UserDao(Context context) {
 	    DemoDBManager.getInstance().onInit(context);
 	}
@@ -108,17 +107,17 @@ public class UserDao {
     public void saveRobotUser(List<RobotUser> robotList){
     	DemoDBManager.getInstance().saveRobotList(robotList);
     }
+
 	/**
-	 * 保存当前登陆用户
+	 * 保存当前登录用户
+	 *
 	 * @param user
 	 */
-	public void saveUserAvatar(UserAvatar user){
+	public void saveUserAvatar(UserAvatar user) {
 		DemoDBManager.getInstance().saveUserAvatar(user);
 	}
-	/**
-	 * 根据用户名获取用户信息
-	 * */
-	public UserAvatar getUserAvatar(String username){
-		return DemoDBManager.getInstance().getUserAvatar(username);
+
+	public UserAvatar getUserAvatar(String userName) {
+		return DemoDBManager.getInstance().getUserAvatar(userName);
 	}
 }

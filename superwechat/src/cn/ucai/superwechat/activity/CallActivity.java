@@ -1,5 +1,6 @@
 package cn.ucai.superwechat.activity;
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.SoundPool;
@@ -29,7 +30,7 @@ public class CallActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
-        audioManager = (AudioManager) this.getSystemService(AUDIO_SERVICE);
+        audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
     }
     
     @Override

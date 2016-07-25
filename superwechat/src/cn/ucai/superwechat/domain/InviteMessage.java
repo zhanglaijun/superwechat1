@@ -15,6 +15,7 @@ package cn.ucai.superwechat.domain;
 
 public class InviteMessage {
 	private String from;
+	private String to;
 	//时间
 	private long time;
 	//添加理由
@@ -36,6 +37,14 @@ public class InviteMessage {
 
 	public void setFrom(String from) {
 		this.from = from;
+	}
+
+	public String getTo() {
+		return to;
+	}
+
+	public void setTo(String to) {
+		this.to = to;
 	}
 
 	public long getTime() {

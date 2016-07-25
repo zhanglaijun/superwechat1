@@ -11,6 +11,10 @@
  */
 package cn.ucai.superwechat.applib.model;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -25,16 +29,11 @@ import android.os.Build;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 
+import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.util.EMLog;
 import com.easemob.util.EasyUtils;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-
-import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 
 /**
  * 新消息提醒class

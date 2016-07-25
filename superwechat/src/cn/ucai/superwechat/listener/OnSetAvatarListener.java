@@ -1,4 +1,4 @@
-package cn.ucai.superwechat.setListener;
+package cn.ucai.superwechat.listener;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,12 +18,12 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.utils.FileUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-
-import cn.ucai.superwechat.R;
-import cn.ucai.superwechat.utils.FileUtils;
 
 
 /**

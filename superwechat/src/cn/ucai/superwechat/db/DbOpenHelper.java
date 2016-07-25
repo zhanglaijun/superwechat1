@@ -52,16 +52,15 @@ public class DbOpenHelper extends SQLiteOpenHelper{
             + UserDao.COLUMN_NAME_DISABLED_GROUPS + " TEXT, "
             + UserDao.COLUMN_NAME_DISABLED_IDS + " TEXT);";
 
-
-	private static final String SUPERWECHAT_USER_TABLE_CREATE= "CREATE TABLE "
+	private static final String SUPERWECHAT_USER_TABLE_CREATE = "CREATE TABLE "
 			+ UserDao.USER_TABLE_NAME + " ("
-			+ UserDao.USER_COLUMN_NAME_ID + " TEXT PRIMARY KEY, "
+			+ UserDao.USER_COLUMN_NAME_ID + " TEXT PRIMARY KEY , "
 			+ UserDao.USER_COLUMN_NAME_NICK + " TEXT, "
-			+ UserDao.USER_COLUMN_NAME_AVATAR + " INTEGER,"
-			+ UserDao.USER_COLUMN_NAME_AVATAR_TYPE +"INTEGER,"
-			+ UserDao.USER_COLUMN_NAME_AVATAR_PAHT +"TEXT,"
-			+ UserDao.USER_COLUMN_NAME_AVATAR_LAST_UPDATE_TIME + " TEXT);";
-
+			+ UserDao.USER_COLUMN_NAME_AVATAR + " INTEGER, "
+			+ UserDao.USER_COLUMN_AVATAR_PATH + " TEXT, "
+			+ UserDao.USER_COLUMN_AVATAR_TYPE + " INTEGER, "
+			+ UserDao.USER_COLUMN_AVATAR_LAST_UPDATE_TIME + " TEXT); ";
+	
 	private DbOpenHelper(Context context) {
 		super(context, getUserDatabaseName(), null, DATABASE_VERSION);
 	}
@@ -84,7 +83,7 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 		db.execSQL(CREATE_PREF_TABLE);
 		db.execSQL(ROBOT_TABLE_CREATE);
 		db.execSQL(SUPERWECHAT_USER_TABLE_CREATE);
-		
+
 	}
 
 	@Override

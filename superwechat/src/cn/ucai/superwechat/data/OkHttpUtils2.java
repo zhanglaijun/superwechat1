@@ -1,4 +1,4 @@
-package cn.ucai.superwechat.utils;
+package cn.ucai.superwechat.data;
 
 import android.os.Handler;
 import android.os.Message;
@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.SuperWeChatApplication;
+import cn.ucai.superwechat.utils.I;
 
 
 /**
@@ -258,13 +258,21 @@ public class OkHttpUtils2<T> {
 
 
     public OkHttpUtils2<T> setRequestUrl(String request) {
-        mUrl = new StringBuilder(I.SERVER_ROOT);
+        mUrl = new StringBuilder(I.SERVER_TOOL);
         mUrl.append(I.QUESTION).append(I.KEY_REQUEST).append(I.EQUALS).append(request);
 //        Log.e("okhttp","1 murl="+ mUrl.toString());
         return this;
     }
 
     public OkHttpUtils2<T> addFile(File file) {
+        if (mUrl == null) {
+            return this;
+        }
+        mFileBody = RequestBody.create(null, file);
+        return this;
+    }
+
+    public OkHttpUtils2<T> addFile1(File file) {
         if (mUrl == null) {
             return this;
         }

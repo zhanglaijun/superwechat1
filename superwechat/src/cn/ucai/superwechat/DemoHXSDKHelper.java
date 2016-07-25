@@ -57,7 +57,7 @@ import com.easemob.util.EasyUtils;
  * @author easemob
  *
  */
-public class DemoHXSDKHelper extends HXSDKHelper{
+public class DemoHXSDKHelper extends HXSDKHelper {
 
     private static final String TAG = "DemoHXSDKHelper";
     

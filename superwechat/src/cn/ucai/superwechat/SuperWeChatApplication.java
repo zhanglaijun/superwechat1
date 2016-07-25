@@ -17,11 +17,11 @@ import android.app.Application;
 import android.content.Context;
 
 import com.easemob.EMCallBack;
+import cn.ucai.superwechat.bean.UserAvatar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-
-import cn.ucai.superwechat.bean.UserAvatar;
 
 public class SuperWeChatApplication extends Application {
 
@@ -89,7 +89,7 @@ public class SuperWeChatApplication extends Application {
 	/**
 	 * 设置用户名
 	 *
-	 * @param
+	 * @param user
 	 */
 	public void setUserName(String username) {
 	    hxSDKHelper.setHXId(username);
@@ -112,17 +112,17 @@ public class SuperWeChatApplication extends Application {
 		// 先调用sdk logout，在清理app中自己的数据
 	    hxSDKHelper.logout(isGCM,emCallBack);
 	}
-	/**全局的当前登陆用户信息*/
-	private UserAvatar user;
-	/**全局是当前登陆用户的好有的集合*/
-	private ArrayList<UserAvatar> userList;
 
-	public ArrayList<UserAvatar> getUserList() {
-		return userList;
+	private UserAvatar user;
+	private ArrayList<UserAvatar> userList = new ArrayList<UserAvatar>();
+	private Map<String, UserAvatar> userMap = new HashMap<String, UserAvatar>();
+
+	public Map<String, UserAvatar> getUserMap() {
+		return userMap;
 	}
 
-	public void setUserList(ArrayList<UserAvatar> userList) {
-		this.userList = userList;
+	public void setUserMap(Map<String, UserAvatar> userMap) {
+		this.userMap = userMap;
 	}
 
 	public UserAvatar getUser() {
@@ -132,13 +132,12 @@ public class SuperWeChatApplication extends Application {
 	public void setUser(UserAvatar user) {
 		this.user = user;
 	}
-	private Map<String,UserAvatar> userMap;
 
-	public Map<String, UserAvatar> getUserMap() {
-		return userMap;
+	public ArrayList<UserAvatar> getUserList() {
+		return userList;
 	}
 
-	public void setUserMap(Map<String, UserAvatar> userMap) {
-		this.userMap = userMap;
+	public void setUserList(ArrayList<UserAvatar> userList) {
+		this.userList = userList;
 	}
 }

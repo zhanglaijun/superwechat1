@@ -47,7 +47,7 @@ import cn.ucai.superwechat.db.InviteMessgeDao;
  * 显示所有会话记录，比较简单的实现，更好的可能是把陌生人存入本地，这样取到的聊天记录是可控的
  * 
  */
-public class ChatAllHistoryFragment extends Fragment implements View.OnClickListener {
+public class ChatAllHistoryFragment extends Fragment implements OnClickListener {
 
 	private InputMethodManager inputMethodManager;
 	private ListView listView;
@@ -89,7 +89,7 @@ public class ChatAllHistoryFragment extends Fragment implements View.OnClickList
 				EMConversation conversation = adapter.getItem(position);
 				String username = conversation.getUserName();
 				if (username.equals(SuperWeChatApplication.getInstance().getUserName()))
-					Toast.makeText(getActivity(), st2, 0).show();
+					Toast.makeText(getActivity(), st2, Toast.LENGTH_SHORT).show();
 				else {
 				    // 进入聊天页面
 				    Intent intent = new Intent(getActivity(), ChatActivity.class);

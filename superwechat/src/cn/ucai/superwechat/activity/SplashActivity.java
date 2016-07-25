@@ -16,16 +16,20 @@ import com.easemob.chat.EMGroupManager;
 import cn.ucai.superwechat.DemoHXSDKHelper;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatApplication;
+import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.bean.UserAvatar;
+import cn.ucai.superwechat.data.OkHttpUtils2;
 import cn.ucai.superwechat.db.UserDao;
-import cn.ucai.superwechat.task.DownloadContactListTask;
+import cn.ucai.superwechat.task.DownloadContactsListTask;
+import cn.ucai.superwechat.utils.I;
+import cn.ucai.superwechat.utils.Utils;
 
 /**
  * 开屏页
  *
  */
 public class SplashActivity extends BaseActivity {
-	private static final String TAG=SplashActivity.class.getSimpleName();
+	private static final String TAG=SplashActivity.class.getCanonicalName();
 	private RelativeLayout rootLayout;
 	private TextView versionText;
 	
@@ -59,14 +63,42 @@ public class SplashActivity extends BaseActivity {
 					EMGroupManager.getInstance().loadAllGroups();
 					EMChatManager.getInstance().loadAllConversations();
 
-					String username = SuperWeChatApplication.getInstance().getUserName();
-					Log.e(TAG,"username="+username);
-					UserDao dao=new UserDao(SplashActivity.this);
-					UserAvatar user=dao.getUserAvatar(username);
+					String userName = SuperWeChatApplication.getInstance().getUserName();
+					UserDao dao = new UserDao(SplashActivity.this);
+					UserAvatar user = dao.getUserAvatar(userName);
 					Log.e(TAG,"user="+user);
-					SuperWeChatApplication.getInstance().setUser(user);
-					SuperWeChatApplication.currentUserNick=user.getMUserNick();
-					new DownloadContactListTask(SplashActivity.this,username).execute();
+					if(user==null){
+						final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
+						utils.setRequestUrl(I.REQUEST_FIND_USER)
+								.addParam(I.User.USER_NAME,userName)
+								.targetClass(String.class)
+								.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+									@Override
+									public void onSuccess(String str) {
+										Log.e(TAG,"str="+str);
+										Result result = Utils.getListResultFromJson(str, UserAvatar.class);
+										if (result != null && result.isRetMsg()) {
+											UserAvatar user= (UserAvatar) result.getRetData();
+											Log.e(TAG,"user="+user);
+											if (user != null) {
+												SuperWeChatApplication.getInstance().setUser(user);
+												SuperWeChatApplication.currentUserNick = user.getMUserNick();
+											}
+											}
+										}
+
+
+									@Override
+									public void onError(String error) {
+										Log.e("main", error);
+									}
+								});
+					}
+					else  {
+						SuperWeChatApplication.getInstance().setUser(user);
+						SuperWeChatApplication.currentUserNick = user.getMUserNick();
+					}
+					new DownloadContactsListTask(SplashActivity.this,userName).getContacts();
 
 					long costTime = System.currentTimeMillis() - start;
 					//等待sleeptime时长

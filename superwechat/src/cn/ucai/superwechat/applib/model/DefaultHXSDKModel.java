@@ -17,10 +17,6 @@ package cn.ucai.superwechat.applib.model;
  * UI Demo HX Model implementation
  */
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,12 +24,16 @@ import java.util.Map;
 import cn.ucai.superwechat.applib.utils.HXPreferenceUtils;
 import cn.ucai.superwechat.db.UserDao;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 /**
  * HuanXin default SDK Model implementation
  * @author easemob
  *
  */
-public class DefaultHXSDKModel extends HXSDKModel {
+public class DefaultHXSDKModel extends HXSDKModel{
     private static final String PREF_USERNAME = "username";
     private static final String PREF_PWD = "pwd";
     UserDao dao = null;

@@ -37,17 +37,17 @@ import java.util.Map;
 
 import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.DemoHXSDKHelper;
-import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.bean.UserAvatar;
+import cn.ucai.superwechat.data.OkHttpUtils2;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.User;
-import cn.ucai.superwechat.task.DownloadContactListTask;
+import cn.ucai.superwechat.task.DownloadContactsListTask;
 import cn.ucai.superwechat.utils.CommonUtils;
-import cn.ucai.superwechat.utils.OkHttpUtils2;
+import cn.ucai.superwechat.utils.I;
 import cn.ucai.superwechat.utils.Utils;
 
 /**
@@ -85,7 +85,6 @@ public class LoginActivity extends BaseActivity {
 		passwordEditText = (EditText) findViewById(R.id.password);
 
 		setListener();
-
 
 		if (SuperWeChatApplication.getInstance().getUserName() != null) {
 			usernameEditText.setText(SuperWeChatApplication.getInstance().getUserName());
@@ -160,7 +159,6 @@ public class LoginActivity extends BaseActivity {
 
 			}
 
-
 			@Override
 			public void onProgress(int progress, String status) {
 			}
@@ -180,6 +178,7 @@ public class LoginActivity extends BaseActivity {
 			}
 		});
 	}
+
 	private void loginAppServer() {
 		final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
 		utils.setRequestUrl(I.REQUEST_LOGIN)
@@ -188,15 +187,18 @@ public class LoginActivity extends BaseActivity {
 				.targetClass(String.class)
 				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
 					@Override
-					public void onSuccess(String s) {
-						Result result= Utils.getResultFromJson(s,UserAvatar.class);
+					public void onSuccess(String str) {
+						Result result = Utils.getResultFromJson(str, UserAvatar.class);
 						if (result != null & result.isRetMsg()) {
-							UserAvatar user= (UserAvatar) result.getRetData();
-							saveUserToDB(user);
-							loginSuccess(user);
+							UserAvatar user = (UserAvatar) result.getRetData();
+							if (user != null) {
+								saveUser2DB(user);
+								loginSuccess(user);
+							}
 						} else {
 							pd.dismiss();
-							Toast.makeText(getApplicationContext(), R.string.Login_failed + result.getRetCode(), Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), R.string.Login_failed+ Utils.getResourceString(LoginActivity.this,result.getRetCode()),
+									Toast.LENGTH_SHORT).show();
 						}
 					}
 
@@ -209,12 +211,9 @@ public class LoginActivity extends BaseActivity {
 				});
 	}
 
-	private void saveUserToDB(UserAvatar user) {
-		if(user!=null){
-			UserDao dao=new UserDao(LoginActivity.this);
-			dao.saveUserAvatar(user);
-		}
-
+	private void saveUser2DB(UserAvatar user) {
+		UserDao dao = new UserDao(LoginActivity.this);
+		dao.saveUserAvatar(user);
 	}
 
 	private void loginSuccess(UserAvatar user) {
@@ -222,9 +221,9 @@ public class LoginActivity extends BaseActivity {
 		SuperWeChatApplication.getInstance().setUserName(currentUsername);
 		SuperWeChatApplication.getInstance().setPassword(currentPassword);
 		SuperWeChatApplication.getInstance().setUser(user);
-		SuperWeChatApplication.currentUserNick=user.getMUserNick();
+		SuperWeChatApplication.currentUserNick = user.getMUserNick();
 
-        new DownloadContactListTask(LoginActivity.this,currentUsername).execute();
+		new DownloadContactsListTask(LoginActivity.this,currentUsername).getContacts();
 		try {
 			// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
 			// ** manually load all local groups and
@@ -261,8 +260,6 @@ public class LoginActivity extends BaseActivity {
 		finish();
 	}
 
-
-
 	private void initializeContacts() {
 		Map<String, User> userlist = new HashMap<String, User>();
 		// 添加user"申请与通知"
@@ -281,13 +278,13 @@ public class LoginActivity extends BaseActivity {
 		groupUser.setHeader("");
 		userlist.put(Constant.GROUP_USERNAME, groupUser);
 		
-		// 添加"Robot"
-		User robotUser = new User();
-		String strRobot = getResources().getString(R.string.robot_chat);
-		robotUser.setUsername(Constant.CHAT_ROBOT);
-		robotUser.setNick(strRobot);
-		robotUser.setHeader("");
-		userlist.put(Constant.CHAT_ROBOT, robotUser);
+//		// 添加"Robot"
+//		User robotUser = new User();
+//		String strRobot = getResources().getString(R.string.robot_chat);
+//		robotUser.setUsername(Constant.CHAT_ROBOT);
+//		robotUser.setNick(strRobot);
+//		robotUser.setHeader("");
+//		userlist.put(Constant.CHAT_ROBOT, robotUser);
 		
 		// 存入内存
 		((DemoHXSDKHelper) HXSDKHelper.getInstance()).setContactList(userlist);

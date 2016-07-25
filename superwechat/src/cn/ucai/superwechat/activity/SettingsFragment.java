@@ -31,7 +31,6 @@ import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import cn.ucai.superwechat.applib.controller.HXSDKHelper;
-
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
 import cn.ucai.superwechat.Constant;
