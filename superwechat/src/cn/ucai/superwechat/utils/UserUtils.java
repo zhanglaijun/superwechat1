@@ -5,14 +5,14 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import cn.ucai.superwechat.applib.controller.HXSDKHelper;
-import cn.ucai.superwechat.DemoHXSDKHelper;
-import cn.ucai.superwechat.SuperWeChatApplication;
+import com.squareup.picasso.Picasso;
 
+import cn.ucai.superwechat.DemoHXSDKHelper;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatApplication;
+import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 import cn.ucai.superwechat.bean.UserAvatar;
 import cn.ucai.superwechat.domain.User;
-import com.squareup.picasso.Picasso;
 
 public class UserUtils {
     /**
@@ -66,7 +66,29 @@ public class UserUtils {
             Picasso.with(context).load(R.drawable.default_avatar).into(imageView);
         }
     }
+    /**
+     * 设置群主头像
+     * @param hxid
+     */
+    public static void setAppGroupAvatar(Context context, String hxid, ImageView imageView){
+        String path = "";
+        if(path != null && hxid != null){
+            path = getGroupAvatarPath(hxid);
+            Picasso.with(context).load(path).placeholder(R.drawable.group_icon).into(imageView);
+        }else{
+            Picasso.with(context).load(R.drawable.group_icon).into(imageView);
+        }
+    }
 
+    public static String getGroupAvatarPath(String hxid) {
+        StringBuilder path = new StringBuilder(I.SERVER_TOOL);
+        path.append(I.QUESTION).append(I.KEY_REQUEST)
+                .append(I.EQUALS).append(I.REQUEST_DOWNLOAD_AVATAR)
+                .append(I.AND).append(I.NAME_OR_HXID).append(I.EQUALS)
+                .append(hxid).append(I.AND).append(I.AVATAR_TYPE)
+                .append(I.EQUALS).append(I.AVATAR_TYPE_GROUP_PATH);
+        return path.toString();
+    }
     public static String getUserAvatarPath(String username) {
         StringBuilder path = new StringBuilder(I.SERVER_TOOL);
         path.append(I.QUESTION).append(I.KEY_REQUEST)
