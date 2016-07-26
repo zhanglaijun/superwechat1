@@ -158,7 +158,7 @@ public class NewGroupActivity extends BaseActivity {
         }).start();
     }
 
-    private void createAppGroup(String groupId, String groupName, String desc, String[] members) {
+    private void createAppGroup(final String groupId, String groupName, String desc, final String[] members) {
         boolean isPublic = checkBox.isChecked();
         boolean invites=!isPublic;
         File file=new File(OnSetAvatarListener.getAvatarPath(NewGroupActivity.this,I.AVATAR_TYPE_GROUP_PATH));
@@ -177,16 +177,63 @@ public class NewGroupActivity extends BaseActivity {
                     @Override
                     public void onSuccess(String s) {
                         Result result = Utils.getListResultFromJson(s, GroupAdapter.class);
+                        GroupAdapter groupAdapter= (GroupAdapter) result.getRetData();
+                        if(result!=null&&result.isRetMsg()){
+                            if(members!=null&&members.length>0){
+                                addGroupMenbers(groupId,members);
+
+                            }else {
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    progressDialog.dismiss();
+                                    setResult(RESULT_OK);
+                                    finish();
+
+                                }
+                            });
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        progressDialog.dismiss();
+                        Toast.makeText(NewGroupActivity.this,st2+error,Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void addGroupMenbers(String hxid, String[] members) {
+        String memberArr="";
+        for(String m:members){
+            memberArr+=m+",";
+        }
+        memberArr.substring(0,members.length-1);
+        Log.e(TAG,"memberArr="+memberArr);
+        final OkHttpUtils2<String>utils2=new OkHttpUtils2<>();
+        utils2.setRequestUrl(I.REQUEST_ADD_GROUP_MEMBERS)
+                .addParam(I.Member.GROUP_HX_ID,hxid)
+                .addParam(I.Member.USER_NAME,memberArr)
+                .targetClass(String.class)
+                .execute(new OkHttpUtils2.OnCompleteListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        Result result = Utils.getListResultFromJson(s, GroupAdapter.class);
+                        GroupAdapter groupAdapter= (GroupAdapter) result.getRetData();
                         if(result!=null&&result.isRetMsg()){
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     progressDialog.dismiss();
                                     setResult(RESULT_OK);
                                     finish();
+
                                 }
                             });
+                        }else {
+                            progressDialog.dismiss();
+                            Toast.makeText(NewGroupActivity.this,st2,Toast.LENGTH_SHORT).show();
                         }
-
                     }
 
                     @Override
