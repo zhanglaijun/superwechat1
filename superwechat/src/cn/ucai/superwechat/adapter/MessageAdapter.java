@@ -417,7 +417,8 @@ public class MessageAdapter extends BaseAdapter{
 		// 群聊时，显示接收的消息的发送人的名称
 		if ((chatType == ChatType.GroupChat || chatType == ChatType.ChatRoom) && message.direct == Direct.RECEIVE){
 		    //demo里使用username代码nick
-			UserUtils.setUserNick(message.getFrom(), holder.tv_usernick);
+//			UserUtils.setUserNick(message.getFrom(), holder.tv_usernick);
+         UserUtils.setAppMemberNick(username,message.getFrom(),holder.tv_usernick);
 		}
 		if(message.direct == Direct.SEND){
 			UserUtils.setCurrentUserNick(holder.tv_usernick);
@@ -582,6 +583,7 @@ public class MessageAdapter extends BaseAdapter{
 				Intent intent = new Intent();
 				intent.setClass(context, UserProfileActivity.class);
 				intent.putExtra("username", message.getFrom());
+                intent.putExtra("groupId",username);
 				context.startActivity(intent);
 			}
 		});
@@ -810,7 +812,7 @@ public class MessageAdapter extends BaseAdapter{
 								// message.setProgress(0);
 								holder.staus_iv.setVisibility(View.VISIBLE);
 								Toast.makeText(activity,
-										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0)
+										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
 										.show();
 								timer.cancel();
 							}
@@ -936,7 +938,7 @@ public class MessageAdapter extends BaseAdapter{
 								// message.setProgress(0);
 								holder.staus_iv.setVisibility(View.VISIBLE);
 								Toast.makeText(activity,
-										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0)
+										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast),Toast.LENGTH_SHORT)
 										.show();
 								timer.cancel();
 							}
@@ -1158,7 +1160,7 @@ public class MessageAdapter extends BaseAdapter{
 								holder.tv.setVisibility(View.INVISIBLE);
 								holder.staus_iv.setVisibility(View.VISIBLE);
 								Toast.makeText(activity,
-										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0)
+										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
 										.show();
 								timer.cancel();
 							}
@@ -1226,7 +1228,7 @@ public class MessageAdapter extends BaseAdapter{
 	 * 
 	 * @param message
 	 * @param holder
-	 * @param position
+	 * @param
 	 */
 	public void sendMsgInBackground(final EMMessage message, final ViewHolder holder) {
 		holder.staus_iv.setVisibility(View.GONE);
@@ -1348,7 +1350,7 @@ public class MessageAdapter extends BaseAdapter{
 							// message.setSendingStatus(Message.SENDING_STATUS_FAIL);
 							holder.staus_iv.setVisibility(View.VISIBLE);
 							Toast.makeText(activity,
-									activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0).show();
+									activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast),Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
@@ -1401,13 +1403,13 @@ public class MessageAdapter extends BaseAdapter{
 					// holder.staus_iv.setVisibility(View.VISIBLE);
 				    
 				    if(message.getError() == EMError.MESSAGE_SEND_INVALID_CONTENT){
-				        Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.error_send_invalid_content), 0)
+				        Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.error_send_invalid_content), Toast.LENGTH_SHORT)
                         .show();
 				    }else if(message.getError() == EMError.MESSAGE_SEND_NOT_IN_THE_GROUP){
-				        Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.error_send_not_in_the_group), 0)
+				        Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.error_send_not_in_the_group),Toast.LENGTH_SHORT)
                         .show();
 				    }else{
-				        Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0)
+				        Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
                         .show();
 				    }
 				}
@@ -1422,7 +1424,7 @@ public class MessageAdapter extends BaseAdapter{
 	 * 
 	 * @param thumbernailPath
 	 * @param iv
-	 * @param position
+	 * @param
 	 * @return the image exists or not
 	 */
 	private boolean showImageView(final String thumbernailPath, final ImageView iv, final String localFullSizePath, String remoteDir,
