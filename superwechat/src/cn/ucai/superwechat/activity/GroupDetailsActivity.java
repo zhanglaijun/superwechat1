@@ -17,8 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -46,6 +48,7 @@ import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.adapter.GroupAdapter;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.data.OkHttpUtils2;
+import cn.ucai.superwechat.task.DownloadMemberMaoTask;
 import cn.ucai.superwechat.utils.I;
 import cn.ucai.superwechat.utils.UserUtils;
 import cn.ucai.superwechat.utils.Utils;
@@ -255,7 +258,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 								runOnUiThread(new Runnable() {
 									public void run() {
 										progressDialog.dismiss();
-										Toast.makeText(getApplicationContext(), st7, 0).show();
+										Toast.makeText(getApplicationContext(), st7, Toast.LENGTH_SHORT).show();
 									}
 								});
 							}
@@ -274,14 +277,14 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 								public void run() {
 								    refreshMembers();
 									progressDialog.dismiss();
-									Toast.makeText(getApplicationContext(), stsuccess, 0).show();
+									Toast.makeText(getApplicationContext(), stsuccess, Toast.LENGTH_SHORT).show();
 								}
 							});
 						} catch (EaseMobException e) {
 							runOnUiThread(new Runnable() {
 								public void run() {
 									progressDialog.dismiss();
-									Toast.makeText(getApplicationContext(), st9, 0).show();
+									Toast.makeText(getApplicationContext(), st9, Toast.LENGTH_SHORT).show();
 								}
 							});
 						}
@@ -303,6 +306,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
         adapter.addAll(members);
 
         adapter.notifyDataSetChanged();
+        setmUpdateMemberListener();
 	}
 
 	/**
@@ -340,7 +344,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	/**
 	 * 退出群组
 	 *
-	 * @param groupId
+	 * @param
 	 */
 	private void exitGrop() {
 		String st1 = getResources().getString(R.string.Exit_the_group_chat_failure);
@@ -361,7 +365,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
-							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Exit_the_group_chat_failure) + " " + e.getMessage(), 1).show();
+							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Exit_the_group_chat_failure) + " " + e.getMessage(), Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
@@ -393,7 +397,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
-							Toast.makeText(getApplicationContext(), st5 + e.getMessage(), 1).show();
+							Toast.makeText(getApplicationContext(), st5 + e.getMessage(),Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
@@ -431,7 +435,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
-							Toast.makeText(getApplicationContext(), st6 + e.getMessage(), 1).show();
+							Toast.makeText(getApplicationContext(), st6 + e.getMessage(), Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
@@ -444,7 +448,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
         for(String m:members){
             memberArr+=m+",";
         }
-        memberArr.substring(0,members.length-1);
+       memberArr= memberArr.substring(0,members.length-1);
         Log.e(TAG,"memberArr="+memberArr);
         final OkHttpUtils2<String>utils2=new OkHttpUtils2<>();
         utils2.setRequestUrl(I.REQUEST_ADD_GROUP_MEMBERS)
@@ -457,6 +461,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
                         Result result = Utils.getListResultFromJson(s, GroupAdapter.class);
                         GroupAdapter groupAdapter= (GroupAdapter) result.getRetData();
                         if(result!=null&&result.isRetMsg()){
+                            new DownloadMemberMaoTask(getApplicationContext(),groupId).getContacts();
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     progressDialog.dismiss();
@@ -508,7 +513,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     progressDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(), st7, 1).show();
+                                    Toast.makeText(getApplicationContext(), st7, Toast.LENGTH_SHORT).show();
                                 }
                             });
 
@@ -696,7 +701,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 								return;
 							}
 							if (!NetUtils.hasNetwork(getApplicationContext())) {
-								Toast.makeText(getApplicationContext(), getString(R.string.network_unavailable), 0).show();
+								Toast.makeText(getApplicationContext(), getString(R.string.network_unavailable),Toast.LENGTH_SHORT).show();
 								return;
 							}
 							EMLog.d("group", "remove user from group:" + username);
@@ -743,7 +748,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 									deleteDialog.dismiss();
 									runOnUiThread(new Runnable() {
 										public void run() {
-											Toast.makeText(getApplicationContext(), st14 + e.getMessage(), 1).show();
+											Toast.makeText(getApplicationContext(), st14 + e.getMessage(), Toast.LENGTH_SHORT).show();
 										}
 									});
 								}
@@ -848,5 +853,18 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	    TextView textView;
 	    ImageView badgeDeleteView;
 	}
+    class UpdateMemberReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshMembers();
+        }
+    }
+    UpdateMemberReceiver mReceiver;
+    private void setmUpdateMemberListener(){
+        mReceiver=new UpdateMemberReceiver();
+        IntentFilter filter=new IntentFilter();
+        registerReceiver(mReceiver,filter);
+    }
 
 }
