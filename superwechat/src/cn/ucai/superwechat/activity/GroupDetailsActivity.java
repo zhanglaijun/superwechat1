@@ -45,7 +45,9 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.adapter.GroupAdapter;
+import cn.ucai.superwechat.bean.GroupAvatar;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.data.OkHttpUtils2;
 import cn.ucai.superwechat.task.DownloadMemberMaoTask;
@@ -187,7 +189,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		clearAllHistory.setOnClickListener(this);
 		blacklistLayout.setOnClickListener(this);
 		changeGroupNameLayout.setOnClickListener(this);
-
+        setmUpdateMemberListener();
 	}
 
 	@Override
@@ -306,7 +308,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
         adapter.addAll(members);
 
         adapter.notifyDataSetChanged();
-        setmUpdateMemberListener();
 	}
 
 	/**
@@ -371,6 +372,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				}
 			}
 		}).start();
+        deleteMembersFromAppGroup(SuperWeChatApplication.getInstance().getUserName(),true);
 	}
 
 	/**
@@ -706,6 +708,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 							}
 							EMLog.d("group", "remove user from group:" + username);
 							deleteMembersFromGroup(username);
+                            deleteMembersFromAppGroup(username,false);
 						} else {
 							// 正常情况下点击user，可以进入用户详情或者聊天页面等等
 							// startActivity(new
@@ -778,7 +781,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			return convertView;
 		}
 
-		@Override
+        @Override
 		public int getCount() {
 			return super.getCount() + 2;
 		}
@@ -846,6 +849,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	protected void onDestroy() {
 		super.onDestroy();
 		instance = null;
+        if(mReceiver!=null){
+            unregisterReceiver(mReceiver);
+        }
 	}
 	
 	private static class ViewHolder{
@@ -865,6 +871,37 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
         mReceiver=new UpdateMemberReceiver();
         IntentFilter filter=new IntentFilter();
         registerReceiver(mReceiver,filter);
+    }
+    private void deleteMembersFromAppGroup(final String username, final boolean isExit) {
+        GroupAvatar group = SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
+        final OkHttpUtils2<String>utils2=new OkHttpUtils2<>();
+        utils2.setRequestUrl(I.REQUEST_DELETE_GROUP_MEMBERS)
+                .addParam(I.Member.GROUP_ID,groupId)
+                .addParam(I.Member.USER_NAME,username)
+                .targetClass(String.class)
+                .execute(new OkHttpUtils2.OnCompleteListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        Log.e(TAG,"S="+s);
+                        Result result = Utils.getListResultFromJson(s, GroupAvatar.class);
+                        Log.e(TAG,"result="+result);
+                        if(result!=null&&result.isRetMsg()){
+                            if(isExit){
+                                GroupAvatar group = SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
+                                SuperWeChatApplication.getInstance().getGroupList().remove(group);
+                                SuperWeChatApplication.getInstance().getGroupMap().remove(groupId);
+                            }else {
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+
     }
 
 }
