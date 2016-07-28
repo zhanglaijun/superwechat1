@@ -35,7 +35,7 @@ import java.io.File;
 
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatApplication;
-import cn.ucai.superwechat.adapter.GroupAdapter;
+import cn.ucai.superwechat.bean.GroupAvatar;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.data.OkHttpUtils2;
 import cn.ucai.superwechat.listener.OnSetAvatarListener;
@@ -158,7 +158,7 @@ public class NewGroupActivity extends BaseActivity {
         }).start();
     }
 
-    private void createAppGroup(final String groupId, String groupName, String desc, final String[] members) {
+    private void createAppGroup(final String groupId, final String groupName, String desc, final String[] members) {
         boolean isPublic = checkBox.isChecked();
         boolean invites=!isPublic;
         File file=new File(OnSetAvatarListener.getAvatarPath(NewGroupActivity.this,I.AVATAR_TYPE_GROUP_PATH));
@@ -176,21 +176,14 @@ public class NewGroupActivity extends BaseActivity {
                 .execute(new OkHttpUtils2.OnCompleteListener<String>() {
                     @Override
                     public void onSuccess(String s) {
-                        Result result = Utils.getListResultFromJson(s, GroupAdapter.class);
-                        GroupAdapter groupAdapter= (GroupAdapter) result.getRetData();
+                        Result result = Utils.getListResultFromJson(s, GroupAvatar.class);
+                        GroupAvatar group= (GroupAvatar) result.getRetData();
                         if(result!=null&&result.isRetMsg()){
                             if(members!=null&&members.length>0){
                                 addGroupMenbers(groupId,members);
 
                             }else {
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    progressDialog.dismiss();
-                                    setResult(RESULT_OK);
-                                    finish();
-
-                                }
-                            });
+                                createGroupSuccess(group);
                             }
                         }
 
@@ -204,12 +197,25 @@ public class NewGroupActivity extends BaseActivity {
                 });
     }
 
-    private void addGroupMenbers(String hxid, String[] members) {
+    private void createGroupSuccess(GroupAvatar group) {
+        SuperWeChatApplication.getInstance().getGroupMap().put(group.getMGroupHxid(),group);
+        SuperWeChatApplication.getInstance().getGroupList().add(group);
+        runOnUiThread(new Runnable() {
+            public void run() {
+                progressDialog.dismiss();
+                setResult(RESULT_OK);
+                finish();
+
+            }
+        });
+    }
+
+    private void addGroupMenbers(final String hxid, String[] members ) {
         String memberArr="";
         for(String m:members){
             memberArr+=m+",";
         }
-        memberArr.substring(0,members.length-1);
+        memberArr=memberArr.substring(0,members.length-1);
         Log.e(TAG,"memberArr="+memberArr);
         final OkHttpUtils2<String>utils2=new OkHttpUtils2<>();
         utils2.setRequestUrl(I.REQUEST_ADD_GROUP_MEMBERS)
@@ -219,17 +225,10 @@ public class NewGroupActivity extends BaseActivity {
                 .execute(new OkHttpUtils2.OnCompleteListener<String>() {
                     @Override
                     public void onSuccess(String s) {
-                        Result result = Utils.getListResultFromJson(s, GroupAdapter.class);
-                        GroupAdapter groupAdapter= (GroupAdapter) result.getRetData();
+                        Result result = Utils.getListResultFromJson(s, GroupAvatar.class);
+                        GroupAvatar group= (GroupAvatar) result.getRetData();
                         if(result!=null&&result.isRetMsg()){
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    progressDialog.dismiss();
-                                    setResult(RESULT_OK);
-                                    finish();
-
-                                }
-                            });
+                            createGroupSuccess(group);
                         }else {
                             progressDialog.dismiss();
                             Toast.makeText(NewGroupActivity.this,st2,Toast.LENGTH_SHORT).show();
