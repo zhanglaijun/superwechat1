@@ -13,13 +13,12 @@
  */
 package cn.ucai.superwechat.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -32,17 +31,23 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
+
+import java.util.List;
+
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.bean.GroupAvatar;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.bean.UserAvatar;
 import cn.ucai.superwechat.data.OkHttpUtils2;
 import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.domain.InviteMessage;
+import cn.ucai.superwechat.task.DownloadMemberMaoTask;
 import cn.ucai.superwechat.utils.I;
 import cn.ucai.superwechat.utils.UserUtils;
 import cn.ucai.superwechat.utils.Utils;
 
 public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
+    private static final String TAG=NewFriendsMsgAdapter.class.getCanonicalName();
 
 	private Context context;
 	private InviteMessgeDao messgeDao;
@@ -178,10 +183,12 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			public void run() {
 				// 调用sdk的同意方法
 				try {
-					if(msg.getGroupId() == null) //同意好友请求
-						EMChatManager.getInstance().acceptInvitation(msg.getFrom());
-					else //同意加群申请
-					    EMGroupManager.getInstance().acceptApplication(msg.getFrom(), msg.getGroupId());
+					if(msg.getGroupId() == null) {//同意好友请求
+                        EMChatManager.getInstance().acceptInvitation(msg.getFrom());
+                    }else { //同意加群申请
+                        EMGroupManager.getInstance().acceptApplication(msg.getFrom(), msg.getGroupId());
+                        addMemberToAppGroup(msg.getFrom(),msg.getGroupId());
+                    }
 					((Activity) context).runOnUiThread(new Runnable() {
 
 						@Override
@@ -213,7 +220,29 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 		}).start();
 	}
 
-	private static class ViewHolder {
+    private void addMemberToAppGroup(String username, final String hxid) {
+        final OkHttpUtils2<String>utils=new OkHttpUtils2<>();
+        utils.setRequestUrl(I.REQUEST_ADD_GROUP_MEMBER)
+                .addParam(I.Member.USER_NAME,username)
+                .addParam(I.Member.GROUP_HX_ID,hxid)
+                .targetClass(String.class)
+                .execute(new OkHttpUtils2.OnCompleteListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        Result result = Utils.getListResultFromJson(s, GroupAvatar.class);
+                        if(result!=null&&result.isRetMsg()){
+                            new DownloadMemberMaoTask(context,hxid).getContacts();
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e(TAG,"error="+error);
+                    }
+                });
+    }
+
+    private static class ViewHolder {
 		ImageView avator;
 		TextView name;
 		TextView reason;
