@@ -266,6 +266,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 							}
 						}
 					}).start();
+                    updateGroupName(returnData);
 				}
 				break;
 			case REQUEST_CODE_ADD_TO_BALCKLIST:
@@ -300,6 +301,30 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		}
 	}
 
+    private void updateGroupName(String newGroupName){
+        final GroupAvatar group=SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
+        final OkHttpUtils2<String>utils2=new OkHttpUtils2<>();
+        utils2.setRequestUrl(I.REQUEST_UPDATE_GROUP_NAME)
+                .addParam(I.Group.GROUP_ID,groupId)
+                .addParam(I.Group.NAME,newGroupName)
+                .targetClass(String.class)
+                .execute(new OkHttpUtils2.OnCompleteListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        Result result = Utils.getListResultFromJson(s, GroupAvatar.class);
+                        if(result!=null&&result.isRetMsg()){
+                            GroupAvatar group= (GroupAvatar) result.getRetData();
+                            SuperWeChatApplication.getInstance().getGroupMap().put(groupId,group);
+                            SuperWeChatApplication.getInstance().getGroupList().add(group);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e(TAG,"error="+error);
+                    }
+                });
+    }
 	private void refreshMembers(){
 	    adapter.clear();
 
