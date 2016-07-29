@@ -8,11 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.bean.MemberUserAvatar;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
-import cn.ucai.fulicenter.utils.I;
 import cn.ucai.fulicenter.utils.Utils;
 
 /**
@@ -39,7 +38,7 @@ public class DownloadMemberMaoTask {
                         ArrayList<MemberUserAvatar> list = (ArrayList<MemberUserAvatar>) result.getRetData();
                         if (list != null && list.size() > 0) {
                             Map<String, HashMap<String, MemberUserAvatar>> memberMap =
-                                    SuperWeChatApplication.getInstance().getMemberMap();
+                                    FuLiCenterApplication.getInstance().getMemberMap();
                             if(!memberMap.containsKey(hxid)){
                                 memberMap.put(hxid,new HashMap<String, MemberUserAvatar>());
                             }

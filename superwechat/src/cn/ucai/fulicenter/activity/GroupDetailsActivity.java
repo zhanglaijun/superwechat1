@@ -45,13 +45,12 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.adapter.GroupAdapter;
 import cn.ucai.fulicenter.bean.GroupAvatar;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.task.DownloadMemberMaoTask;
-import cn.ucai.fulicenter.utils.I;
 import cn.ucai.fulicenter.utils.UserUtils;
 import cn.ucai.fulicenter.utils.Utils;
 import cn.ucai.fulicenter.widget.ExpandGridView;
@@ -302,7 +301,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	}
 
     private void updateGroupName(String newGroupName){
-        final GroupAvatar group=SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
+        final GroupAvatar group= FuLiCenterApplication.getInstance().getGroupMap().get(groupId);
         final OkHttpUtils2<String>utils2=new OkHttpUtils2<>();
         utils2.setRequestUrl(I.REQUEST_UPDATE_GROUP_NAME)
                 .addParam(I.Group.GROUP_ID,groupId)
@@ -314,8 +313,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
                         Result result = Utils.getListResultFromJson(s, GroupAvatar.class);
                         if(result!=null&&result.isRetMsg()){
                             GroupAvatar group= (GroupAvatar) result.getRetData();
-                            SuperWeChatApplication.getInstance().getGroupMap().put(groupId,group);
-                            SuperWeChatApplication.getInstance().getGroupList().add(group);
+                            FuLiCenterApplication.getInstance().getGroupMap().put(groupId,group);
+                            FuLiCenterApplication.getInstance().getGroupList().add(group);
                         }
                     }
 
@@ -397,7 +396,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				}
 			}
 		}).start();
-        deleteMembersFromAppGroup(SuperWeChatApplication.getInstance().getUserName(),true);
+        deleteMembersFromAppGroup(FuLiCenterApplication.getInstance().getUserName(),true);
 	}
 
 	/**
@@ -434,7 +433,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	}
 
     private void deleteGroupFromApp(String ts5){
-        final GroupAvatar group =SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
+        final GroupAvatar group = FuLiCenterApplication.getInstance().getGroupMap().get(groupId);
         final OkHttpUtils2<Result>utils2=new OkHttpUtils2<>();
         utils2.setRequestUrl(I.REQUEST_DELETE_GROUP)
                 .addParam(I.Group.GROUP_ID,String.valueOf(group.getMGroupId()))
@@ -917,7 +916,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
         registerReceiver(mReceiver,filter);
     }
     private void deleteMembersFromAppGroup(final String username, final boolean isExit) {
-        GroupAvatar group = SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
+        GroupAvatar group = FuLiCenterApplication.getInstance().getGroupMap().get(groupId);
         final OkHttpUtils2<String>utils2=new OkHttpUtils2<>();
         utils2.setRequestUrl(I.REQUEST_DELETE_GROUP_MEMBERS)
                 .addParam(I.Member.GROUP_ID,groupId)
@@ -931,9 +930,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
                         Log.e(TAG,"result="+result);
                         if(result!=null&&result.isRetMsg()){
                             if(isExit){
-                                GroupAvatar group = SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
-                                SuperWeChatApplication.getInstance().getGroupList().remove(group);
-                                SuperWeChatApplication.getInstance().getGroupMap().remove(groupId);
+                                GroupAvatar group = FuLiCenterApplication.getInstance().getGroupMap().get(groupId);
+                                FuLiCenterApplication.getInstance().getGroupList().remove(group);
+                                FuLiCenterApplication.getInstance().getGroupMap().remove(groupId);
                             }else {
                             }
                         }

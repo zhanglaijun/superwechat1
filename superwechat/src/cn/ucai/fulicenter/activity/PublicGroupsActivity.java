@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.utils.UserUtils;
 
 public class PublicGroupsActivity extends BaseActivity {
@@ -135,7 +135,7 @@ public class PublicGroupsActivity extends BaseActivity {
                         public void run() {
                             searchBtn.setVisibility(View.VISIBLE);
                             for(EMGroupInfo g:returnGroups) {
-                                if(!SuperWeChatApplication.getInstance().getGroupMap().containsKey(g.getGroupId())){
+                                if(!FuLiCenterApplication.getInstance().getGroupMap().containsKey(g.getGroupId())){
 
                                     groupsList.add(g);
                                 }

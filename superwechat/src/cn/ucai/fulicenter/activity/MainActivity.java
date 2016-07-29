@@ -63,7 +63,7 @@ import java.util.UUID;
 import cn.ucai.fulicenter.Constant;
 import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.UserAvatar;
@@ -73,7 +73,6 @@ import cn.ucai.fulicenter.db.UserDao;
 import cn.ucai.fulicenter.domain.InviteMessage;
 import cn.ucai.fulicenter.domain.User;
 import cn.ucai.fulicenter.utils.CommonUtils;
-import cn.ucai.fulicenter.utils.I;
 import cn.ucai.fulicenter.utils.Utils;
 
 public class MainActivity extends BaseActivity implements EMEventListener {
@@ -525,7 +524,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			Map<String, User> localUsers = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList();
 			Map<String, User> toAddUsers = new HashMap<String, User>();
 			//获取全局变量的map
-			Map<String, UserAvatar> userMap = SuperWeChatApplication.getInstance().getUserMap();
+			Map<String, UserAvatar> userMap = FuLiCenterApplication.getInstance().getUserMap();
 			//将要添加的好友添加到一个集合
 			List<String> toAddUserName = new ArrayList<String>();
 			for (String username : usernameList) {
@@ -544,7 +543,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			for (String name : toAddUserName) {
 				final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
 				utils.setRequestUrl(I.REQUEST_ADD_CONTACT)
-						.addParam(I.Contact.USER_NAME,SuperWeChatApplication.getInstance().getUserName())
+						.addParam(I.Contact.USER_NAME, FuLiCenterApplication.getInstance().getUserName())
 						.addParam(I.Contact.CU_NAME,name)
 						.targetClass(String.class)
 						.execute(new OkHttpUtils2.OnCompleteListener<String>() {
@@ -554,9 +553,9 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 								if (result != null & result.isRetMsg()) {
 									UserAvatar user = (UserAvatar) result.getRetData();
 									if (user != null) {
-										if (!SuperWeChatApplication.getInstance().getUserMap().containsKey(user.getMUserName())) {
-											SuperWeChatApplication.getInstance().getUserMap().put(user.getMUserName(), user);
-											SuperWeChatApplication.getInstance().getUserList().add(user);
+										if (!FuLiCenterApplication.getInstance().getUserMap().containsKey(user.getMUserName())) {
+											FuLiCenterApplication.getInstance().getUserMap().put(user.getMUserName(), user);
+											FuLiCenterApplication.getInstance().getUserList().add(user);
 											sendStickyBroadcast(new Intent("update_contact_list"));
 										}
 									}
@@ -579,7 +578,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		public void onContactDeleted(final List<String> usernameList) {
 			Log.e(TAG,"onContactDeleted,usernameList="+usernameList);
 			// 被删除
-			String currentUsername=SuperWeChatApplication.getInstance().getUserName();
+			String currentUsername= FuLiCenterApplication.getInstance().getUserName();
 			for(final String userName:usernameList){
 				final OkHttpUtils2<Result>utils2=new OkHttpUtils2<>();
 				utils2.setRequestUrl(I.REQUEST_DELETE_CONTACT)
@@ -591,9 +590,9 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 							public void onSuccess(Result result) {
 								if(result.isRetMsg()){
 									((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().remove(userName);
-									UserAvatar u=SuperWeChatApplication.getInstance().getUserMap().get(userName);
-									SuperWeChatApplication.getInstance().getUserList().remove(u);
-									SuperWeChatApplication.getInstance().getUserMap().remove(userName);
+									UserAvatar u= FuLiCenterApplication.getInstance().getUserMap().get(userName);
+									FuLiCenterApplication.getInstance().getUserList().remove(u);
+									FuLiCenterApplication.getInstance().getUserMap().remove(userName);
 									userDao.deleteContact(userName);
 									inviteMessgeDao.deleteMessage(userName);
 									sendStickyBroadcast(new Intent("update_contact_list"));

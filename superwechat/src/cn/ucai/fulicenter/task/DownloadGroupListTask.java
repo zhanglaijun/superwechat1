@@ -6,11 +6,10 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.bean.GroupAvatar;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
-import cn.ucai.fulicenter.utils.I;
 import cn.ucai.fulicenter.utils.Utils;
 
 /**
@@ -36,9 +35,9 @@ public class DownloadGroupListTask {
                         Result result = Utils.getListResultFromJson(str, GroupAvatar.class);
                         ArrayList<GroupAvatar> list = (ArrayList<GroupAvatar>) result.getRetData();
                         if (list != null && list.size() > 0) {
-                            SuperWeChatApplication.getInstance().setGroupList(list);
+                            FuLiCenterApplication.getInstance().setGroupList(list);
                             for(GroupAvatar g:list){
-                                SuperWeChatApplication.getInstance().getGroupMap().put(g.getMGroupHxid(),g);
+                                FuLiCenterApplication.getInstance().getGroupMap().put(g.getMGroupHxid(),g);
                             }
                             mContext.sendStickyBroadcast(new Intent("update_group_list"));
 

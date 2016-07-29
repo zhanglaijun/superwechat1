@@ -59,7 +59,7 @@ import java.util.Map.Entry;
 import cn.ucai.fulicenter.Constant;
 import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.adapter.ContactAdapter;
 import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
 import cn.ucai.fulicenter.bean.Result;
@@ -68,7 +68,6 @@ import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.db.InviteMessgeDao;
 import cn.ucai.fulicenter.db.UserDao;
 import cn.ucai.fulicenter.domain.User;
-import cn.ucai.fulicenter.utils.I;
 import cn.ucai.fulicenter.widget.Sidebar;
 
 /**
@@ -366,7 +365,7 @@ public class ContactlistFragment extends Fragment {
 
 			}
 		}).start();
-		String currentUserName= SuperWeChatApplication.getInstance().getUserName();
+		String currentUserName= FuLiCenterApplication.getInstance().getUserName();
 		final OkHttpUtils2<Result>utils2=new OkHttpUtils2<>();
 		utils2.setRequestUrl(I.REQUEST_DELETE_CONTACT)
 				.addParam(I.Contact.USER_NAME,currentUserName)
@@ -379,9 +378,9 @@ public class ContactlistFragment extends Fragment {
 						if(result.isRetMsg()){
 							Log.e(TAG,"result remove user....");
 							((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().remove(tobeDeleteUser);
-							UserAvatar u=SuperWeChatApplication.getInstance().getUserMap().get(tobeDeleteUser);
-							SuperWeChatApplication.getInstance().getUserList().remove(u);
-							SuperWeChatApplication.getInstance().getUserMap().remove(tobeDeleteUser.getUsername());
+							UserAvatar u= FuLiCenterApplication.getInstance().getUserMap().get(tobeDeleteUser);
+							FuLiCenterApplication.getInstance().getUserList().remove(u);
+							FuLiCenterApplication.getInstance().getUserMap().remove(tobeDeleteUser.getUsername());
 							getActivity().sendStickyBroadcast(new Intent("update_contact_list"));
 						}
 

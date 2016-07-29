@@ -15,14 +15,13 @@ import com.easemob.chat.EMGroupManager;
 
 import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.UserAvatar;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.db.UserDao;
 import cn.ucai.fulicenter.task.DownloadContactsListTask;
 import cn.ucai.fulicenter.task.DownloadGroupListTask;
-import cn.ucai.fulicenter.utils.I;
 import cn.ucai.fulicenter.utils.Utils;
 
 /**
@@ -64,7 +63,7 @@ public class SplashActivity extends BaseActivity {
 					EMGroupManager.getInstance().loadAllGroups();
 					EMChatManager.getInstance().loadAllConversations();
 
-					String userName = SuperWeChatApplication.getInstance().getUserName();
+					String userName = FuLiCenterApplication.getInstance().getUserName();
 					UserDao dao = new UserDao(SplashActivity.this);
 					UserAvatar user = dao.getUserAvatar(userName);
 					Log.e(TAG,"user="+user);
@@ -82,8 +81,8 @@ public class SplashActivity extends BaseActivity {
 											UserAvatar user= (UserAvatar) result.getRetData();
 											Log.e(TAG,"user="+user);
 											if (user != null) {
-												SuperWeChatApplication.getInstance().setUser(user);
-												SuperWeChatApplication.currentUserNick = user.getMUserNick();
+												FuLiCenterApplication.getInstance().setUser(user);
+												FuLiCenterApplication.currentUserNick = user.getMUserNick();
 											}
 											}
 										}
@@ -96,8 +95,8 @@ public class SplashActivity extends BaseActivity {
 								});
 					}
 					else  {
-						SuperWeChatApplication.getInstance().setUser(user);
-						SuperWeChatApplication.currentUserNick = user.getMUserNick();
+						FuLiCenterApplication.getInstance().setUser(user);
+						FuLiCenterApplication.currentUserNick = user.getMUserNick();
 					}
 					new DownloadContactsListTask(SplashActivity.this,userName).getContacts();
                     new DownloadGroupListTask(SplashActivity.this,userName).getContacts();
