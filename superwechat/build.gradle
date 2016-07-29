@@ -20,7 +20,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "24.0.0"
     defaultConfig{
-        applicationId "cn.ucai.superwechat"
+        applicationId "cn.ucai.fulicenter"
     }
 
     sourceSets {
@@ -45,5 +45,9 @@ android {
         // by a similar customization.
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
+    }
+    lintOptions{
+        checkReleaseBuilds false
+        abortOnError false
     }
 }
