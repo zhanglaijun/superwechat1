@@ -30,11 +30,12 @@ import com.easemob.exceptions.EaseMobException;
 
 import java.io.File;
 
-import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.FuLiCenterApplication;
+import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.listener.OnSetAvatarListener;
+import cn.ucai.fulicenter.utils.I;
 
 /**
  * 注册页

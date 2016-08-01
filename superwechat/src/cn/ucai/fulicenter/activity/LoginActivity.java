@@ -42,8 +42,8 @@ import java.util.Map;
 
 import cn.ucai.fulicenter.Constant;
 import cn.ucai.fulicenter.DemoHXSDKHelper;
-import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.FuLiCenterApplication;
+import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.UserAvatar;
@@ -51,8 +51,8 @@ import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.db.UserDao;
 import cn.ucai.fulicenter.domain.User;
 import cn.ucai.fulicenter.task.DownloadContactsListTask;
-import cn.ucai.fulicenter.task.DownloadGroupListTask;
 import cn.ucai.fulicenter.utils.CommonUtils;
+import cn.ucai.fulicenter.utils.I;
 import cn.ucai.fulicenter.utils.UserUtils;
 import cn.ucai.fulicenter.utils.Utils;
 
@@ -262,7 +262,6 @@ public class LoginActivity extends BaseActivity {
 		FuLiCenterApplication.currentUserNick = user.getMUserNick();
 
 		new DownloadContactsListTask(LoginActivity.this,currentUsername).getContacts();
-        new DownloadGroupListTask(LoginActivity.this,currentUsername).getContacts();
 		try {
 			// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
 			// ** manually load all local groups and

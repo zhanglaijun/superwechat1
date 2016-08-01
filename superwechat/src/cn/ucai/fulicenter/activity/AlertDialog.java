@@ -13,8 +13,6 @@
  */
 package cn.ucai.fulicenter.activity;
 
-import java.io.File;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -25,10 +23,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.task.DownloadImageTask;
-import cn.ucai.fulicenter.utils.ImageCache;
 import com.easemob.util.ImageUtils;
+
+import java.io.File;
+
+import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.utils.ImageCache;
 
 public class AlertDialog extends BaseActivity {
 	private TextView mTextView;
@@ -74,7 +74,6 @@ public class AlertDialog extends BaseActivity {
 		if(path != null){
 			 //优先拿大图，没有去取缩略图
 			if(!new File(path).exists())
-				path = DownloadImageTask.getThumbnailImagePath(path);
 		    imageView.setVisibility(View.VISIBLE);
 		    ((TextView)findViewById(R.id.alert_message)).setVisibility(View.GONE);
 		    if(ImageCache.getInstance().get(path) != null){

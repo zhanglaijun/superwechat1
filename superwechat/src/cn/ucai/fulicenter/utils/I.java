@@ -5,7 +5,7 @@ import cn.ucai.fulicenter.D;
 public interface I {
     String SERVER_URL = "http://10.0.2.2:8080/SuperWeChatServer/Server";
 
-    String SERVER_ROOT = "http://10.0.2.2:8080/FuLiCenterServer/Server";
+    String SERVER_TOOL = "http://10.0.2.2:8888/FuLiCenterServer/Server";
     public static final String FILE_NAME = "file_name";
 
     public static final int REQUEST_CODE_LOGIN = 1;
@@ -58,7 +58,7 @@ public interface I {
 
     //商户名称
     public static final String MERCHANT_NAME = "福利社";
-    String QUESTION = "?";
+
     //货币单位
     public static final String CURRENCY_TYPE_CNY = "CNY";
     public static final String CURRENCY_TYPE_USD = "USD";
@@ -250,7 +250,27 @@ public interface I {
         String CU_ID = "m_contact_cid";                //好友id
         String CU_NAME = "m_contact_cname";                //好友账号
     }
-
+    interface Group {
+        String TABLE_NAME 								= 		"t_superwechat_group";
+        String GROUP_ID 								= 		"m_group_id";					// 主键
+        String HX_ID 									= 		"m_group_hxid";					//环信群组id
+        String NAME 									= 		"m_group_name";					//群组名称
+        String DESCRIPTION 							= 		"m_group_description";			//群组简介
+        String OWNER 									= 		"m_group_owner";				//群组所有者－用户账号
+        String MODIFIED_TIME 							= 		"m_group_last_modified_time";	//最后修改时间
+        String MAX_USERS 								= 		"m_group_max_users";			//最大人数
+        String AFFILIATIONS_COUNT 					= 		"m_group_affiliations_count";	//群组人数
+        String IS_PUBLIC 								= 		"m_group_is_public";			//群组是否公开
+        String ALLOW_INVITES 							= 		"m_group_allow_invites";		//是否可以邀请
+    }
+    interface Member {
+        String TABLE_NAME 								= 		"t_superwechat_member";
+        String MEMBER_ID 								= 		"m_member_id";					//主键
+        String USER_NAME 								= 		"m_member_user_name";			//用户账号
+        String GROUP_ID 								= 		"m_member_group_id";			//群组id
+        String GROUP_HX_ID 							= 		"m_member_group_hxid";			//群组环信id
+        String PERMISSION 								= 		"m_member_permission";			//用户对群组的权限\n0:普通用户\n1:群组所有者
+    }
     interface Avatar {
         String TABLE_NAME = "t_superwechat_avatar";
         String AVATAR_ID = "m_avatar_id";                    //主键
@@ -258,6 +278,15 @@ public interface I {
         String USER_NAME = "m_avatar_user_name";            //用户账号或者群组账号
         String AVATAR_PATH = "m_avatar_path";                //保存路径
         String AVATAR_TYPE = "m_avatar_type";                //头像类型：\n0:用户头像\n1:群组头像
+    }
+    interface Location {
+        String TABLE_NAME 								= 		"t_superwechat_location";
+        String LOCATION_ID 							= 		"m_location_id";				//主键
+        String USER_NAME 								= 		"m_location_user_name";			//用户账号
+        String LATITUDE 								= 		"m_location_latitude";			//纬度
+        String LONGITUDE 								= 		"m_location_longitude";			//经度
+        String IS_SEARCHED 							= 		"m_location_is_searched";		//是否可以被搜索到
+        String UPDATE_TIME 							= 		"m_location_last_update_time";	//最后更新时间
     }
 
     public enum ActionType {
@@ -268,7 +297,7 @@ public interface I {
     public final int CATEGORY_GOOD = 1;
     public final int CAT_ID = 0;
 
-    /**
+    /**L
      * 商品排序方式
      */
     public final int SORT_BY_PRICE_ASC = 1;
@@ -276,7 +305,7 @@ public interface I {
     public final int SORT_BY_ADDTIME_ASC = 3;
     public final int SORT_BY_ADDTIME_DESC = 4;
 
-    String AVATAR_PATH = "//Users/clawpo/work/ucai/work/projects/SuperWeChat/teaching/201603/superwechatDB/";
+//    String AVATAR_PATH = "//Users/clawpo/work/ucai/work/projects/SuperWeChat/teaching/201603/superwechatDB/";
     String ISON8859_1 = "iso8859-1";
     String UTF_8 = "utf-8";
     String PAGE_ID = "page_id";                        //分页的起始下标
@@ -299,6 +328,10 @@ public interface I {
     String AVATAR_SUFFIX_PNG = ".png";                            //PNG图片后缀名
     String AVATAR_SUFFIX_JPG = ".jpg";                            //JPG图片后缀名
     String MSG_PREFIX_MSG = "msg_";                            //返回的消息码前缀
+    String QUESTION 									= 		"?";							//问号
+    String NAME_OR_HXID                             	=       "name_or_hxid";
+    String AND											= 		"&";							//
+    String EQUALS 										= 		"=";							//等号
     int LOCATION_IS_SEARCH_ALLOW = 1;                                //可以被搜索到地理位置
     int LOCATION_IS_SEARCH_INHIBIT = 0;                                //禁止被搜索到地理位置
     int MSG_CONNECTION_SUCCESS = 900;                            //连接服务器成功
@@ -511,12 +544,12 @@ public interface I {
      * 客户端发送的根据群组环信id查找公开群组请求
      */
     String REQUEST_FIND_PUBLIC_GROUP_BY_HXID = "find_public_group_by_group_hxid";
-    String DOWNLOAD_USER_AVATAR_URL = SERVER_ROOT
+    String DOWNLOAD_USER_AVATAR_URL = SERVER_TOOL
             + "?" + KEY_REQUEST + "=" + REQUEST_DOWNLOAD_AVATAR + "&" + AVATAR_TYPE + "=";
     /**
      * 客户端发送的根据根据群组环信id下载群组头像的请求
      */
-    String DOWNLOAD_GROUP_AVATAR_URL = SERVER_ROOT
+    String DOWNLOAD_GROUP_AVATAR_URL = SERVER_TOOL
             + "?" + KEY_REQUEST + "=" + REQUEST_DOWNLOAD_GROUP_AVATAR + "&time=123" + "&" + AVATAR_TYPE + "=";
     String REQUEST_FIND_CHARGE = "find_charge";
 
@@ -596,7 +629,7 @@ public interface I {
     /**
      * 下载商品相册图像的URL
      */
-    String DOWNLOAD_AVATAR_URL = SERVER_ROOT +
+    String DOWNLOAD_AVATAR_URL = SERVER_TOOL +
             "?request=" + REQUEST_DOWNLOAD_AVATAR + "&avatar=";
 
     /**
@@ -606,7 +639,7 @@ public interface I {
     /**
      * 下载商品相册图像的接口
      */
-    String DOWNLOAD_ALBUM_IMG_URL = SERVER_ROOT +
+    String DOWNLOAD_ALBUM_IMG_URL = SERVER_TOOL +
             "?request=" + REQUEST_DOWNLOAD_ALBUM_IMG + "&img_url=";
 
     /**
@@ -616,7 +649,7 @@ public interface I {
     /**
      * 下载精选首页图像的接口
      */
-    String DOWNLOAD_BOUTIQUE_IMG_URL = SERVER_ROOT +
+    String DOWNLOAD_BOUTIQUE_IMG_URL = SERVER_TOOL +
             "?request=" + REQUEST_DOWNLOAD_BOUTIQUE_IMG + "&" + Boutique.IMAGE_URL + "=";
 
     /**
@@ -626,7 +659,7 @@ public interface I {
     /**
      * 下载分类商品大类图像的接口
      */
-    String DOWNLOAD_DOWNLOAD_CATEGORY_GROUP_IMAGE_URL = SERVER_ROOT +
+    String DOWNLOAD_DOWNLOAD_CATEGORY_GROUP_IMAGE_URL = SERVER_TOOL +
             "?request=" + REQUEST_DOWNLOAD_CATEGORY_GROUP_IMAGE
             + "&" + D.CategoryGroup.IMAGE_URL + "=";
 
@@ -637,7 +670,7 @@ public interface I {
     /**
      * 下载收藏商品图像的接口
      */
-    String DOWNLOAD_GOODS_THUMB_URL = SERVER_ROOT +
+    String DOWNLOAD_GOODS_THUMB_URL = SERVER_TOOL +
             "?request=" + REQUEST_DOWNLOAD_GOODS_THUMB
             + "&" + Collect.GOODS_THUMB + "=";
 
@@ -648,7 +681,7 @@ public interface I {
     /**
      * 下载分类商品小类图像的接口
      */
-    String DOWNLOAD_DOWNLOAD_CATEGORY_CHILD_IMAGE_URL = SERVER_ROOT +
+    String DOWNLOAD_DOWNLOAD_CATEGORY_CHILD_IMAGE_URL = SERVER_TOOL +
             "?request=" + REQUEST_DOWNLOAD_CATEGORY_GROUP_IMAGE
             + "&" + D.CategoryChild.IMAGE_URL + "=";
 
@@ -658,11 +691,12 @@ public interface I {
     /**
      * 壹收款服务端支付URL
      */
-    String PAY_URL = SERVER_ROOT + "?request=" + I.REQUEST_PAY;
+    String PAY_URL = SERVER_TOOL + "?request=" + I.REQUEST_PAY;
 
     String ACTION_TYPE_PERSONAL = "personal";
     String ACTION_TYPE_CART = "cart";
-
+    /** 客户端发送的用户姓名查找用户所在的群组请求 */
+    String REQUEST_FIND_GROUP_BY_USER_NAME 			= 		"find_group_by_user_name";
     /**
      * 添加收藏
      */

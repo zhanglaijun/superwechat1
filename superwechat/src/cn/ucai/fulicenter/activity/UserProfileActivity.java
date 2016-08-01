@@ -28,8 +28,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import cn.ucai.fulicenter.DemoHXSDKHelper;
-import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.FuLiCenterApplication;
+import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.UserAvatar;
@@ -37,6 +37,7 @@ import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.db.UserDao;
 import cn.ucai.fulicenter.domain.User;
 import cn.ucai.fulicenter.listener.OnSetAvatarListener;
+import cn.ucai.fulicenter.utils.I;
 import cn.ucai.fulicenter.utils.UserUtils;
 import cn.ucai.fulicenter.utils.Utils;
 
@@ -114,7 +115,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 		switch (v.getId()) {
 		case R.id.user_head_avatar:
 //			uploadHeadPhoto();
-            mOnSetAvatarListener=new OnSetAvatarListener(UserProfileActivity.this,R.id.layout_upload_avatar,getAvatarName(),I.AVATAR_TYPE_GROUP_PATH);
+            mOnSetAvatarListener=new OnSetAvatarListener(UserProfileActivity.this,R.id.layout_upload_avatar,getAvatarName(), I.AVATAR_TYPE_GROUP_PATH);
 			break;
 		case R.id.rl_nickname:
 			final EditText editText = new EditText(this);
