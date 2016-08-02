@@ -33,7 +33,7 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder=null;
         LayoutInflater inflater=LayoutInflater.from(mContext);
-        holder=new GoodViewHolder(inflater.inflate(R.layout.fragment_new_goods,null,false));
+        holder=new GoodViewHolder(inflater.inflate(R.layout.item_good,null,false));
         return  holder;
     }
 
