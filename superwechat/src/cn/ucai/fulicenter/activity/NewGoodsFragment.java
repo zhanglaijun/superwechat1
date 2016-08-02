@@ -61,6 +61,7 @@ public class NewGoodsFragment extends Fragment {
 
     private void setPullUpRefreshListener() {
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            int lastItemPosition;
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -68,6 +69,10 @@ public class NewGoodsFragment extends Fragment {
                 int b=RecyclerView.SCROLL_STATE_IDLE;
                 int c=RecyclerView.SCROLL_STATE_SETTLING;
                 Log.e(TAG,"new State="+newState);
+                if(newState==RecyclerView.SCROLL_STATE_IDLE&& lastItemPosition==mAdapter.getItemCount()-1){
+                    pageId+=I.PAGE_SIZE_DEFAULT;
+                    initData();
+                }
             }
 
             @Override
@@ -76,6 +81,7 @@ public class NewGoodsFragment extends Fragment {
                 int f=mGridLayoutManager.findFirstVisibleItemPosition();
                 int l=mGridLayoutManager.findLastVisibleItemPosition();
                 Log.e(TAG,"f="+f+",l="+l);
+                lastItemPosition=mGridLayoutManager.findLastVisibleItemPosition();
             }
         });
     }
@@ -84,8 +90,9 @@ public class NewGoodsFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                pageId=0;
+                mSwipeRefreshLayout.setRefreshing(true);
                 tvHint.setVisibility(View.VISIBLE);
-                pageId=1;
                 initData();
             }
         });
