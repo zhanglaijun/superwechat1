@@ -35,9 +35,10 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
         mbtnCart= (Button) findViewById(R.id.btnCart);
         mbtnContact= (Button) findViewById(R.id.btnContact);
 
+
         mNewGoodsFragment=new NewGoodsFragment();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container,mNewGoodsFragment)
+                .add(R.id.layout,mNewGoodsFragment)
 //                .add(R.id.fragment_container,contactlistFragment)
 //                  .hide(contactListFragment)
                   .show(mNewGoodsFragment)

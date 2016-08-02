@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class NewGoodsFragment extends Fragment {
     GridLayoutManager mGridLayoutManager;
     GoodAdapter mAdapter;
     List<NewGoodBean> mGoodList;
-    int pageId=1;
+    int pageId=0;
     TextView tvHint;
     public NewGoodsFragment() {
         // Required empty public constructor
@@ -69,9 +70,12 @@ public class NewGoodsFragment extends Fragment {
                 int b=RecyclerView.SCROLL_STATE_IDLE;
                 int c=RecyclerView.SCROLL_STATE_SETTLING;
                 Log.e(TAG,"new State="+newState);
-                if(newState==RecyclerView.SCROLL_STATE_IDLE&& lastItemPosition==mAdapter.getItemCount()-1){
-                    pageId+=I.PAGE_SIZE_DEFAULT;
-                    initData();
+                if(newState==RecyclerView.SCROLL_STATE_IDLE
+                        && lastItemPosition==mAdapter.getItemCount()-1){
+                    if(mAdapter.isMore()){
+                        pageId +=I.PAGE_SIZE_DEFAULT;
+                        initData();
+                    }
                 }
             }
 
@@ -103,21 +107,28 @@ public class NewGoodsFragment extends Fragment {
             findNewGoodList(new OkHttpUtils2.OnCompleteListener<NewGoodBean[]>() {
                 @Override
                 public void onSuccess(NewGoodBean[] result) {
-                    Log.e(TAG, "result=" + result);
-                    tvHint.setVisibility(View.GONE);
                     mSwipeRefreshLayout.setRefreshing(false);
+                    tvHint.setVisibility(View.GONE);
+                    mAdapter.setMore(true);
+                    mAdapter.setFooterString(getResources().getString(R.string.load_more));
+                    Log.e(TAG, "result=" + result);
                     if (result != null) {
                         Log.e(TAG, "result.length=" + result.length);
                         ArrayList<NewGoodBean> goodBeanArrayList = Utils.array2List(result);
                         mAdapter.initData(goodBeanArrayList);
+                        if(goodBeanArrayList.size()<I.PAGE_SIZE_DEFAULT){
+                            mAdapter.setMore(false);
+                            mAdapter.setFooterString(getResources().getString(R.string.no_more));
+                        }
                     }
                 }
 
                 @Override
                 public void onError(String error) {
-                    tvHint.setVisibility(View.GONE);
-                    mSwipeRefreshLayout.setRefreshing(false);
                     Log.e(TAG, "error=" + error);
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    tvHint.setVisibility(View.GONE);
+                    Toast.makeText(mContext,error,Toast.LENGTH_SHORT).show();
                 }
             });
 
