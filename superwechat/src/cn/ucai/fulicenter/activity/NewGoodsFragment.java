@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +18,15 @@ import java.util.List;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.adapter.GoodAdapter;
 import cn.ucai.fulicenter.bean.NewGoodBean;
+import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.utils.I;
+import cn.ucai.fulicenter.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class NewGoodsFragment extends Fragment {
+    private final static String TAG=NewGoodsFragment.class.getCanonicalName();
     FuliCenterActivity mContext;
     
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -30,6 +34,7 @@ public class NewGoodsFragment extends Fragment {
     GridLayoutManager mGridLayoutManager;
     GoodAdapter mAdapter;
     List<NewGoodBean> mGoodList;
+    int pageId=1;
     public NewGoodsFragment() {
         // Required empty public constructor
     }
@@ -40,9 +45,44 @@ public class NewGoodsFragment extends Fragment {
                              Bundle savedInstanceState) {
        mContext= (FuliCenterActivity) getContext();
         View layout = View.inflate(mContext, R.layout.fragment_new_goods, null);
-        mGoodList=new ArrayList<NewGoodBean>();
+        mGoodList=new ArrayList<>();
         initView(layout);
+        initData();
         return layout;
+    }
+
+    private void initData() {
+        try {
+            findNewGoodList(new OkHttpUtils2.OnCompleteListener<NewGoodBean[]>() {
+                @Override
+                public void onSuccess(NewGoodBean[] result) {
+                    Log.e(TAG, "result=" + result);
+                    if (result != null) {
+                        Log.e(TAG, "result.length=" + result.length);
+                        ArrayList<NewGoodBean> goodBeanArrayList = Utils.array2List(result);
+                        mAdapter.initData(goodBeanArrayList);
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "error=" + error);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void findNewGoodList(OkHttpUtils2.OnCompleteListener<NewGoodBean[]>listener){
+        OkHttpUtils2<NewGoodBean[]>utils2=new OkHttpUtils2<>();
+        utils2.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
+                .addParam(I.NewAndBoutiqueGood.CAT_ID,String.valueOf(I.CAT_ID))
+                .addParam(I.PAGE_ID,String.valueOf(pageId))
+                .addParam(I.PAGE_SIZE,String.valueOf(I.PAGE_SIZE_DEFAULT))
+                .targetClass(NewGoodBean[].class)
+                .execute(listener);
     }
 
     private void initView(View layout) {

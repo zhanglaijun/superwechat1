@@ -11,6 +11,7 @@ import cn.ucai.fulicenter.R;
 
 public class FuliCenterActivity extends BaseActivity implements View.OnClickListener{
     Button mbtnNewGoods,mbtnBoutique,mbtnCategory,mbtnCart,mbtnContact;
+    NewGoodsFragment mNewGoodsFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +34,14 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
         mbtnCategory= (Button) findViewById(R.id.btnCategory);
         mbtnCart= (Button) findViewById(R.id.btnCart);
         mbtnContact= (Button) findViewById(R.id.btnContact);
+
+        mNewGoodsFragment=new NewGoodsFragment();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container,mNewGoodsFragment)
+//                .add(R.id.fragment_container,contactlistFragment)
+//                  .hide(contactListFragment)
+                  .show(mNewGoodsFragment)
+                .commit();
 
     }
     public void onClick(View v){
