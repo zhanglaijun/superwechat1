@@ -3,6 +3,8 @@ package cn.ucai.fulicenter.activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +14,11 @@ import cn.ucai.fulicenter.R;
 public class FuliCenterActivity extends BaseActivity implements View.OnClickListener{
     Button mbtnNewGoods,mbtnBoutique,mbtnCategory,mbtnCart,mbtnContact;
     NewGoodsFragment mNewGoodsFragment;
+    BoutiqueFragment mBoutiqueFragment;
+    private Fragment[] fragments;
+    private Button[] mTabs;
+    int index;
+    int currentTabIndex;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +44,12 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
 
 
         mNewGoodsFragment=new NewGoodsFragment();
+        mBoutiqueFragment=new BoutiqueFragment();
+        fragments = new Fragment[] { mNewGoodsFragment, mBoutiqueFragment,  };
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.layout,mNewGoodsFragment)
-//                .add(R.id.fragment_container,contactlistFragment)
-//                  .hide(contactListFragment)
+                .add(R.id.layout,mBoutiqueFragment)
+                  .hide(mBoutiqueFragment)
                   .show(mNewGoodsFragment)
                 .commit();
 
@@ -50,22 +59,38 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
         switch (v.getId()){
             case R.id.btnNewGoods:
                 setDrawable(mbtnNewGoods,R.drawable.menu_item_new_good_selected,Color.BLACK);
+                index = 0;
                 break;
             case R.id.btnBoutique:
                 setDrawable(mbtnBoutique,R.drawable.boutique_selected,Color.BLACK);
+                index = 1;
                 break;
             case R.id.btnCategory:
                 setDrawable(mbtnCategory,R.drawable.menu_item_category_selected,Color.BLACK);
+                index = 2;
                 break;
             case R.id.btnCart:
                 setDrawable(mbtnCart,R.drawable.menu_item_cart_selected,Color.BLACK);
+                index = 3;
                 break;
             case R.id.btnContact:
                 setDrawable(mbtnContact,R.drawable.menu_item_personal_center_selected, Color.BLACK);
+                index = 4;
                 break;
+        }
+        if (currentTabIndex != index) {
+            FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
+            trx.hide(fragments[currentTabIndex]);
+            if (!fragments[index].isAdded()) {
+                trx.add(R.id.fragment_container, fragments[index]);
+            }
+            trx.show(fragments[index]).commit();
+            currentTabIndex = index;
         }
 
     }
+
+
     private void initDrawable() {
         setDrawable(mbtnNewGoods, R.drawable.menu_item_new_good_normal, Color.GRAY);
         setDrawable(mbtnContact, R.drawable.menu_item_personal_center_normal, Color.GRAY);
@@ -79,6 +104,5 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
         drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
         button.setCompoundDrawables(null,drawable,null,null);
     }
-
 
 }
