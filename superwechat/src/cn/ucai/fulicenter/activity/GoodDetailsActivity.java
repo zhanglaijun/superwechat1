@@ -10,9 +10,11 @@ import android.widget.Toast;
 
 import cn.ucai.fulicenter.D;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.bean.AlbumBean;
 import cn.ucai.fulicenter.bean.GoodDetailsBean;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.utils.I;
+import cn.ucai.fulicenter.viewholder.DisplayUtils;
 import cn.ucai.fulicenter.viewholder.FlowIndicator;
 import cn.ucai.fulicenter.viewholder.SlideAutoLoopView;
 
@@ -33,6 +35,7 @@ private static final String TAG=GoodDetailsActivity.class.getCanonicalName();
     WebView wvGoodBrief;
 
     int mGoodId;
+    GoodDetailsBean mGoodDetail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +52,10 @@ private static final String TAG=GoodDetailsActivity.class.getCanonicalName();
                 @Override
                 public void onSuccess(GoodDetailsBean result) {
                     Log.e(TAG,"result="+result);
-                    showGoodDetails(result);
+                    if(result!=null){
+                        mGoodDetail=result;
+                        showGoodDetails();
+                    }
                 }
 
                 @Override
@@ -65,11 +71,32 @@ private static final String TAG=GoodDetailsActivity.class.getCanonicalName();
         }
     }
 
-    private void showGoodDetails(GoodDetailsBean detail) {
-       tvGoodEnglishName.setText(detail.getGoodsEnglishName());
-        tvGoodName.setText(detail.getGoodsName());
-        tvGoodPriceCurrent.setText(detail.getCurrencyPrice());
-        tvGoodPriceShop.setText(detail.getShopPrice());
+    private void showGoodDetails() {
+       tvGoodEnglishName.setText(mGoodDetail.getGoodsEnglishName());
+        tvGoodName.setText(mGoodDetail.getGoodsName());
+        tvGoodPriceCurrent.setText(mGoodDetail.getCurrencyPrice());
+        tvGoodPriceShop.setText(mGoodDetail.getShopPrice());
+        mSlideAutoLoopView.startPlayLoop(mFlowIndicator,getAlbumImageUrl(),getAlbumImageSize());
+        wvGoodBrief.loadDataWithBaseURL(null,mGoodDetail.getGoodsBrief(),D.TEXT_HTML,D.UTF_8,null);
+    }
+
+    private String[] getAlbumImageUrl() {
+        String[] albumImageUrl = new String[]{};
+        if (mGoodDetail.getProperties() != null && mGoodDetail.getProperties().length > 0) {
+            AlbumBean[] album = mGoodDetail.getProperties()[0].getAlbums();
+            albumImageUrl = new String[album.length];
+            for (int i = 0; i < albumImageUrl.length; i++) {
+                albumImageUrl[i] = album[i].getImgUrl();
+            }
+        }
+        return albumImageUrl;
+    }
+
+    private int getAlbumImageSize() {
+        if(mGoodDetail.getProperties()!=null&&mGoodDetail.getProperties().length>0){
+            return mGoodDetail.getProperties()[0].getAlbums().length;
+        }
+        return 0;
     }
 
     private void getGoodDetailsByGoodId(OkHttpUtils2.OnCompleteListener<GoodDetailsBean> listener){
@@ -81,6 +108,7 @@ private static final String TAG=GoodDetailsActivity.class.getCanonicalName();
     }
 
     private void initView() {
+        DisplayUtils.initBack(GoodDetailsActivity.this);
         ivShare= (ImageView) findViewById(R.id.iv_good_share);
         ivCollect= (ImageView) findViewById(R.id.iv_good_collect);
         ivCart= (ImageView) findViewById(R.id.iv_good_cart);
