@@ -1,6 +1,7 @@
 package cn.ucai.fulicenter.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.ucai.fulicenter.D;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.activity.BoutiqueDetailsActivity;
 import cn.ucai.fulicenter.bean.BoutiqueBean;
 import cn.ucai.fulicenter.utils.I;
 import cn.ucai.fulicenter.utils.ImageUtils;
@@ -73,12 +76,15 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mBoutiqueViewHolder.tvBoutiqueName.setText(boutique.getName());
             mBoutiqueViewHolder.tvBoutiqueDesc.setText(boutique.getDescription());
             mBoutiqueViewHolder.tvBoutiqueTitle.setText(boutique.getTitle());
-          /*  mBoutiqueViewHolder.layout.setOnClickListener(new View.OnClickListener() {
+            mBoutiqueViewHolder.layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mContext.startActivity(new Intent(mContext,BoutiqueAdapter.class));
+                    mContext.startActivity(new Intent(mContext,BoutiqueDetailsActivity.class)
+                    .putExtra(D.Boutique.KEY_GOODS_ID,boutique.getId())
+                    );
+
                 }
-            });*/
+            });
         }
         if(holder instanceof FooterViewHolder){
             mFooterViewHolder= (FooterViewHolder) holder;

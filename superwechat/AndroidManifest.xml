@@ -319,11 +319,13 @@
 
         <activity
             android:name=".activity.FuliCenterActivity"
-            android:label="@string/title_activity_fuli_center">
+            android:label="@string/title_activity_fuli_center"
+            android:theme="@style/horizontal_slide">
         </activity>
         <activity
             android:name=".activity.BoutiqueDetailsActivity"
-            android:label="@string/title_activity_boutique_details">
+            android:label="@string/title_activity_boutique_details"
+            android:theme="@style/horizontal_slide">
         </activity>
     </application>
 

@@ -3,8 +3,9 @@
               android:layout_height="match_parent"
               android:orientation="vertical"
     >
+    <include layout="@layout/common_head_title"/>
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/srl_boutique"
+        android:id="@+id/srl_boutique_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/list_background">
@@ -14,7 +15,7 @@
             android:orientation="vertical">
             <include layout="@layout/common_refresh_hint"/>
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_boutique"
+                android:id="@+id/rv_boutique_details"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 >
