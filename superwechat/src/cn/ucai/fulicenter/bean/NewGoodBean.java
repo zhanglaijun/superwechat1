@@ -1,8 +1,8 @@
 package cn.ucai.fulicenter.bean;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
 import java.io.Serializable;
+
+import org.codehaus.jackson.annotate.JsonProperty;
 /**
  * 新品和精选的实体类
  * @author yao

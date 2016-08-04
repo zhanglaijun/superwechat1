@@ -31,14 +31,14 @@
     <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
 
     <permission
         android:name="cn.ucai.fulicenter.permission.C2D_MESSAGE"
         android:protectionLevel="signature"/>
 
     <uses-permission android:name="cn.ucai.fulicenter.permission.C2D_MESSAGE"/>
-
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".FuLiCenterApplication"
@@ -65,6 +65,12 @@
             </intent-filter>
         </activity>
 
+        <!-- 商品详情 -->
+        <activity
+            android:name=".activity.GoodDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide">
+        </activity>
         <!-- 登陆 -->
         <activity
             android:name=".activity.LoginActivity"
@@ -314,6 +320,10 @@
         <activity
             android:name=".activity.FuliCenterActivity"
             android:label="@string/title_activity_fuli_center">
+        </activity>
+        <activity
+            android:name=".activity.BoutiqueDetailsActivity"
+            android:label="@string/title_activity_boutique_details">
         </activity>
     </application>
 

@@ -15,12 +15,14 @@ dependencies {
     compile files('libs/okhttp-urlconnection-2.7.5.jar')
     compile files('libs/okio-1.6.0.jar')
     compile files('libs/jackson-core-asl-1.9.11.jar')
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
 }
 
 android {
     compileSdkVersion 23
     buildToolsVersion "24.0.0"
-    defaultConfig{
+    defaultConfig {
         applicationId "cn.ucai.fulicenter"
     }
 
@@ -47,7 +49,7 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
-    lintOptions{
+    lintOptions {
         checkReleaseBuilds false
         abortOnError false
     }

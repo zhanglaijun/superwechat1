@@ -70,7 +70,7 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mBoutiqueViewHolder = (BoutiqueViewHolder) holder;
             final BoutiqueBean boutique= mBoutiqueList.get(position);
             ImageUtils.setGoodThumb(mContext, mBoutiqueViewHolder.ivBoutiqueThumb,boutique.getImageurl());
-            mBoutiqueViewHolder.tvGoodName.setText(boutique.getName());
+            mBoutiqueViewHolder.tvBoutiqueName.setText(boutique.getName());
             mBoutiqueViewHolder.tvBoutiqueDesc.setText(boutique.getDescription());
             mBoutiqueViewHolder.tvBoutiqueTitle.setText(boutique.getTitle());
           /*  mBoutiqueViewHolder.layout.setOnClickListener(new View.OnClickListener() {
@@ -116,12 +116,12 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     class BoutiqueViewHolder extends RecyclerView.ViewHolder{
         RelativeLayout layout;
         ImageView ivBoutiqueThumb;
-        TextView tvGoodName, tvBoutiqueDesc,tvBoutiqueTitle;
+        TextView tvBoutiqueName, tvBoutiqueDesc,tvBoutiqueTitle;
         public BoutiqueViewHolder(View itemView) {
             super(itemView);
             layout= (RelativeLayout) itemView.findViewById(R.id.layout_boutique_item);
             ivBoutiqueThumb = (ImageView) itemView.findViewById(R.id.ivBoutiqueImg);
-            tvGoodName= (TextView) itemView.findViewById(R.id.tvBoutiqueName);
+            tvBoutiqueName= (TextView) itemView.findViewById(R.id.tvBoutiqueName);
             tvBoutiqueDesc = (TextView) itemView.findViewById(R.id.tvBoutiqueDescription);
             tvBoutiqueTitle= (TextView) itemView.findViewById(R.id.tvBoutiqueTitle);
         }

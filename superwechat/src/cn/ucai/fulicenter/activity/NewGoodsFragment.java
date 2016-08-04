@@ -173,6 +173,7 @@ public class NewGoodsFragment extends Fragment {
         mGridLayoutManager=new GridLayoutManager(mContext, I.COLUM_NUM);
         mGridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
+        mRecyclerView.setHasFixedSize(true);
         mAdapter=new GoodAdapter(mContext,mGoodList);
         mRecyclerView.setAdapter(mAdapter);
         tvHint= (TextView) layout.findViewById(R.id.tv_refresh_hint);

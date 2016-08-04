@@ -31,23 +31,22 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@+id/iv_good_collect"
-            android:layout_centerVertical="true"
-            android:padding="5dp">
+            >
             <ImageView
-                android:id="@+id/ivAddCart"
+                android:id="@+id/iv_good_cart"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/bg_cart_selected"
-                android:layout_marginRight="5dp"/>
+               android:padding="5dp"
+                android:src="@drawable/bg_cart_selected"/>
             <TextView
+                android:id="@+id/tv_cart_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:text="10"
-                android:textColor="@color/ebpay_red"/>
+                android:textColor="#f00"/>
 
         </RelativeLayout>
     </RelativeLayout>
@@ -92,18 +91,19 @@
             android:textColor="@color/good_detail_currency_price"/>
 
             <RelativeLayout
+                android:id="@+id/layout_image"
                 android:layout_width="wrap_content"
                 android:layout_height="200dp"
                 android:layout_below="@+id/tv_good_name"
                 android:layout_marginTop="20dp"
                 >
-                <cn.ucai.fulicenter.view.SlideAutoLoopView
-                    android:id="@+id/salv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/good_detail_bg_white" />
+                <cn.ucai.fulicenter.viewholder.SlideAutoLoopView
+                android:id="@+id/salv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/good_detail_bg_white" />
 
-                <cn.ucai.fulicenter.view.FlowIndicator
+                <cn.ucai.fulicenter.viewholder.FlowIndicator
                     android:id="@+id/indicator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -115,14 +115,18 @@
                     app:r="5dp"
                     app:space="3dp" />
 
-            </RelativeLayout>
-    </RelativeLayout>
-    <webView
-        android:id="@+id/wv_good_brief"
-        android:layout_below="@+id/layout_banner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-    </webView>
+            </RelativeLayout>
+        <WebView
+            android:id="@+id/wv_good_brief"
+            android:layout_below="@+id/layout_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/good_detail_bg_white"
+            >
+
+        </WebView>
+    </RelativeLayout>
 
 </RelativeLayout>
