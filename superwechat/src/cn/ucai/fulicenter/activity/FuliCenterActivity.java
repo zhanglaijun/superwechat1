@@ -15,6 +15,7 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
     Button mbtnNewGoods,mbtnBoutique,mbtnCategory,mbtnCart,mbtnContact;
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
+    CategoryFragment mCategoryFragment;
     private Fragment[] fragments;
     int index;
     int currentTabIndex;
@@ -47,7 +48,8 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.layout,mNewGoodsFragment)
                 .add(R.id.layout,mBoutiqueFragment)
-                  .hide(mBoutiqueFragment)
+                .add(R.id.layout,mCategoryFragment)
+                  .hide(mBoutiqueFragment).hide(mCategoryFragment)
                   .show(mNewGoodsFragment)
                 .commit();
 
@@ -57,8 +59,10 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
         fragments=new Fragment[5];
         mNewGoodsFragment=new NewGoodsFragment();
         mBoutiqueFragment=new BoutiqueFragment();
+        mCategoryFragment=new CategoryFragment();
         fragments[0] =  mNewGoodsFragment;
         fragments[1] =  mBoutiqueFragment;
+        fragments[2]=mCategoryFragment;
     }
 
     public void onClick(View v){
