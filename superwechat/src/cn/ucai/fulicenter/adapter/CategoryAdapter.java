@@ -43,7 +43,6 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     public int getChildrenCount(int groupPosition) {
         return mChildList.get(groupPosition).size();
     }
-
     @Override
     public CategoryGroupBean getGroup(int groupPosition) {
         if(mGroupList!=null)return mGroupList.get(groupPosition);
@@ -123,6 +122,15 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
     }
+
+    public void addAll(List<CategoryGroupBean> mGroupList, List<ArrayList<CategoryChildBean>> mChildList) {
+        this.mGroupList.clear();
+        this.mGroupList.addAll(mGroupList);
+        this.mChildList.clear();
+        this.mChildList.addAll(mChildList);
+        notifyDataSetChanged();
+    }
+
     class GroupViewHolder{
         ImageView ivGroupThumb;
         TextView tvGroupName;

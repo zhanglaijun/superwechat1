@@ -45,18 +45,19 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
 
         initFragment();
 
-        getSupportFragmentManager().beginTransaction()
+        getSupportFragmentManager()
+                .beginTransaction()
                 .add(R.id.layout,mNewGoodsFragment)
                 .add(R.id.layout,mBoutiqueFragment)
                 .add(R.id.layout,mCategoryFragment)
-                  .hide(mBoutiqueFragment).hide(mCategoryFragment)
-                  .show(mNewGoodsFragment)
+                .hide(mBoutiqueFragment).hide(mCategoryFragment)
+                .show(mNewGoodsFragment)
                 .commit();
 
     }
 
     private void initFragment() {
-        fragments=new Fragment[5];
+        fragments=new Fragment[4];
         mNewGoodsFragment=new NewGoodsFragment();
         mBoutiqueFragment=new BoutiqueFragment();
         mCategoryFragment=new CategoryFragment();

@@ -30,7 +30,7 @@ public class CategoryFragment extends Fragment {
     List<CategoryGroupBean>mGroupList;
     List<ArrayList<CategoryChildBean>>mChildList;
     CategoryAdapter mAdapter;
-
+    int groupCount;
 
     public CategoryFragment() {
         // Required empty public constructor
@@ -40,8 +40,8 @@ public class CategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View layout = View.inflate(mContext, R.layout.fragment_category, null);
         mContext= (FuliCenterActivity) getContext();
+        View layout = View.inflate(mContext, R.layout.fragment_category, null);
         mGroupList=new ArrayList<CategoryGroupBean>();
         mChildList=new ArrayList<ArrayList<CategoryChildBean>>();
         mAdapter=new CategoryAdapter(mContext,mGroupList,mChildList);
@@ -60,24 +60,11 @@ public class CategoryFragment extends Fragment {
                     if(groupList!=null){
                         Log.e(TAG,"grouplist="+groupList.size());
                         mGroupList=groupList;
+                         int i=0;
                         for(CategoryGroupBean g:groupList){
-                         findCategoryChildList(new OkHttpUtils2.OnCompleteListener<CategoryChildBean[]>() {
-                             @Override
-                             public void onSuccess(CategoryChildBean[] result) {
-                                 Log.e(TAG,"result="+result);
-                                 if(result!=null){
-                                     ArrayList<CategoryChildBean>childList=Utils.array2List(result);
-                                     Log.e(TAG,"childList="+childList.size());
-                                     mChildList.add(childList);
-                                     mAdapter.notifyDataSetChanged();
-                                 }
-                             }
-
-                             @Override
-                             public void onError(String error) {
-                                 Log.e(TAG,"child error="+error);
-                             }
-                         },g.getId());
+                            mChildList.add(new ArrayList<CategoryChildBean>());
+                            findCategoryChildList(g.getId(),i);
+                            i++;
                         }
                     }
                 }
@@ -89,17 +76,38 @@ public class CategoryFragment extends Fragment {
             }
         });
     }
-    private void findCategoryChildList(OkHttpUtils2.OnCompleteListener<CategoryChildBean[]>listener,int parentId){
+    private void findCategoryChildList(int parentId,final int index){
         OkHttpUtils2<CategoryChildBean[]>utils2=new OkHttpUtils2<>();
         utils2.setRequestUrl(I.REQUEST_FIND_CATEGORY_CHILDREN)
                 .addParam(I.CategoryChild.PARENT_ID,parentId+"")
                 .addParam(I.PAGE_ID,I.PAGE_ID_DEFAULT+"")
                 .addParam(I.PAGE_SIZE,I.PAGE_SIZE_DEFAULT+"")
                 .targetClass(CategoryChildBean[].class)
-                .execute(listener);
+                .execute(new OkHttpUtils2.OnCompleteListener<CategoryChildBean[]>() {
+                    @Override
+                    public void onSuccess(CategoryChildBean[] result) {
+                        groupCount++;
+                        Log.e(TAG,"child result="+result);
+                        if (result!=null) {
+                            ArrayList<CategoryChildBean> childList = Utils.array2List(result);
+
+                            if (childList != null) {
+                                mChildList.set(index, childList);
+                            }
+                        }
+                        if(groupCount==mGroupList.size()){
+                            mAdapter.addAll(mGroupList,mChildList);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e(TAG,"child error="+error);
+                    }
+                });
     }
     private void findCategoryGroupList(OkHttpUtils2.OnCompleteListener<CategoryGroupBean[]>listener){
-        OkHttpUtils2<CategoryGroupBean[]>utils2=new OkHttpUtils2<>();
+        OkHttpUtils2<CategoryGroupBean[]>utils2=new OkHttpUtils2<CategoryGroupBean[]>();
         utils2.setRequestUrl(I.REQUEST_FIND_CATEGORY_GROUP)
                 .targetClass(CategoryGroupBean[].class)
                 .execute(listener);
