@@ -673,7 +673,6 @@ public interface I {
     String DOWNLOAD_GOODS_THUMB_URL = SERVER_TOOL +
             "?request=" + REQUEST_DOWNLOAD_GOODS_THUMB
             + "&" + Collect.GOODS_THUMB + "=";
-
     /**
      * 下载分类商品小类图像的请求
      */
