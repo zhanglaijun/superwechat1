@@ -3,6 +3,7 @@ package cn.ucai.fulicenter.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +34,15 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     FooterViewHolder mFooterViewHolder;
     boolean isMore;
     String footerString;
+    int sortBy;
 
 
     public GoodAdapter(Context Context, List<NewGoodBean> list) {
         mContext = Context;
         mGoodList = new ArrayList<NewGoodBean>();
         mGoodList.addAll(list);
-        soryByAddTime();
+        sortBy=I.SORT_BY_ADDTIME_DESC;
+        soryBy();
     }
 
     public boolean isMore() {
@@ -52,6 +55,12 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     public void setFooterString(String footerString) {
         this.footerString = footerString;
+        notifyDataSetChanged();
+    }
+
+    public void setSortBy(int sortBy) {
+        this.sortBy = sortBy;
+        soryBy();
         notifyDataSetChanged();
     }
 
@@ -111,13 +120,13 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             mGoodList.clear();
         }
         mGoodList.addAll(list);
-        soryByAddTime();
+        soryBy();
         notifyDataSetChanged();
     }
 
     public void addItem(ArrayList<NewGoodBean> list) {
         mGoodList.addAll(list);
-        soryByAddTime();
+        soryBy();
         notifyDataSetChanged();
     }
 
@@ -133,12 +142,34 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             tvGoodPrice= (TextView) itemView.findViewById(R.id.tv_good_price);
         }
     }
-    private void soryByAddTime(){
+    private void soryBy(){
         Collections.sort(mGoodList, new Comparator<NewGoodBean>() {
             @Override
             public int compare(NewGoodBean goodLeft, NewGoodBean goodRight) {
-                return (int) (Long.valueOf(goodRight.getAddTime())-Long.valueOf(goodLeft.getAddTime()));
+                int result=0;
+                switch (sortBy){
+                    case I.SORT_BY_ADDTIME_DESC:
+                        result=(int)(Long.valueOf(goodRight.getAddTime())-Long.valueOf(goodLeft.getAddTime()));
+                        break;
+                    case I.SORT_BY_ADDTIME_ASC:
+                        result=(int)(Long.valueOf(goodLeft.getAddTime())-Long.valueOf(goodRight.getAddTime()));
+                        break;
+                    case I.SORT_BY_PRICE_DESC:
+                        result=converPrice(goodRight.getCurrencyPrice())-converPrice(goodLeft.getCurrencyPrice());
+                        break;
+                    case I.SORT_BY_PRICE_ASC:
+                        result=converPrice(goodLeft.getCurrencyPrice())-converPrice(goodRight.getCurrencyPrice());
+                        break;
+                }
+                Log.i("main", "123result=" + result);
+                return result;
+            }
+            private int converPrice(String price){
+                price=price.substring(1);
+                return Integer.valueOf(price);
             }
         });
     }
-}
+
+    }
+

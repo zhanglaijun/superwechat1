@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +32,9 @@ public class CategoryChildActivity extends Activity {
     GridLayoutManager mGridLayoutManager;
     GoodAdapter mAdapter;
     TextView tvHint;
-
+    Button btnSortPrice,btnSortAddTime;
+    boolean mSortPriceAsc,mSortAddTimeAsc;
+    int sortBy;
     int pageId=0;
     int action= I.ACTION_DOWNLOAD;
 
@@ -42,6 +45,9 @@ public class CategoryChildActivity extends Activity {
         mContext= this;
         setContentView(R.layout.activity_category_child);
         mGoodList=new ArrayList<NewGoodBean>();
+        sortBy=I.SORT_BY_ADDTIME_DESC;
+        btnSortPrice= (Button) findViewById(R.id.btn_sort_price);
+        btnSortAddTime= (Button) findViewById(R.id.btn_sort_addtime);
         initView();
         initData();
         setListener();
@@ -49,6 +55,9 @@ public class CategoryChildActivity extends Activity {
     private void setListener() {
         setPullDownRefreshListener();
         setPullUpRefreshListener();
+        SortStatusChangeedListener listener=new SortStatusChangeedListener();
+        btnSortPrice.setOnClickListener(listener);
+        btnSortAddTime.setOnClickListener(listener);
     }
 
     private void setPullUpRefreshListener() {
@@ -172,6 +181,32 @@ public class CategoryChildActivity extends Activity {
         mAdapter=new GoodAdapter(mContext,mGoodList);
         mRecyclerView.setAdapter(mAdapter);
         tvHint= (TextView)findViewById(R.id.tv_refresh_hint);
+
+    }
+    class SortStatusChangeedListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.btn_sort_price:
+                    if(mSortPriceAsc){
+                        sortBy=I.SORT_BY_PRICE_ASC;
+                    }else {
+                        sortBy=I.SORT_BY_PRICE_DESC;
+                    }
+                    mSortPriceAsc=!mSortPriceAsc;
+                    break;
+                case R.id.btn_sort_addtime:
+                    if(mSortAddTimeAsc){
+                        sortBy=I.SORT_BY_ADDTIME_ASC;
+                    }else {
+                        sortBy=I.SORT_BY_ADDTIME_DESC;
+                    }
+                    mSortAddTimeAsc=!mSortAddTimeAsc;
+                    break;
+            }
+            mAdapter.setSortBy(sortBy);
+        }
     }
 
 }
