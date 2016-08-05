@@ -16,8 +16,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.ucai.fulicenter.CatChildFilterButton;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.adapter.GoodAdapter;
+import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.NewGoodBean;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.utils.I;
@@ -38,8 +40,10 @@ public class CategoryChildActivity extends Activity {
     int sortBy;
     int pageId=0;
     int action= I.ACTION_DOWNLOAD;
-
+    CatChildFilterButton mCatChildFilterButton;
     int catId=0;
+    String name;
+    ArrayList<CategoryChildBean>childList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +51,6 @@ public class CategoryChildActivity extends Activity {
         setContentView(R.layout.activity_category_child);
         mGoodList=new ArrayList<NewGoodBean>();
         sortBy=I.SORT_BY_ADDTIME_DESC;
-        btnSortPrice= (Button) findViewById(R.id.btn_sort_price);
-        btnSortAddTime= (Button) findViewById(R.id.btn_sort_addtime);
         initView();
         initData();
         setListener();
@@ -59,6 +61,7 @@ public class CategoryChildActivity extends Activity {
         SortStatusChangeedListener listener=new SortStatusChangeedListener();
         btnSortPrice.setOnClickListener(listener);
         btnSortAddTime.setOnClickListener(listener);
+        mCatChildFilterButton.setOnCatFilterClickListener(name,childList);
     }
 
     private void setPullUpRefreshListener() {
@@ -112,6 +115,7 @@ public class CategoryChildActivity extends Activity {
     private void initData() {
         catId=getIntent().getIntExtra(I.NewAndBoutiqueGood.CAT_ID,0);
         Log.e(TAG,"catId="+catId);
+        childList= (ArrayList<CategoryChildBean>) getIntent().getSerializableExtra("childList");
         if(catId<0){
             finish();
         }
@@ -182,7 +186,11 @@ public class CategoryChildActivity extends Activity {
         mAdapter=new GoodAdapter(mContext,mGoodList);
         mRecyclerView.setAdapter(mAdapter);
         tvHint= (TextView)findViewById(R.id.tv_refresh_hint);
-
+        btnSortPrice= (Button) findViewById(R.id.btn_sort_price);
+        btnSortAddTime= (Button) findViewById(R.id.btn_sort_addtime);
+        mCatChildFilterButton= (CatChildFilterButton) findViewById(R.id.btnCatChildFilter);
+        name=getIntent().getStringExtra(I.CategoryGroup.NAME);
+        mCatChildFilterButton.setText(name);
     }
     class SortStatusChangeedListener implements View.OnClickListener{
 
