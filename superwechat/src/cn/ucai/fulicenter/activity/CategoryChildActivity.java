@@ -24,6 +24,7 @@ import cn.ucai.fulicenter.bean.NewGoodBean;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.utils.I;
 import cn.ucai.fulicenter.utils.Utils;
+import cn.ucai.fulicenter.viewholder.DisplayUtils;
 
 public class CategoryChildActivity extends Activity {
     private final static String TAG=BoutiqueDetailsActivity.class.getCanonicalName();
@@ -113,7 +114,7 @@ public class CategoryChildActivity extends Activity {
     }
 
     private void initData() {
-        catId=getIntent().getIntExtra(I.NewAndBoutiqueGood.CAT_ID,0);
+        catId=getIntent().getIntExtra(I.CategoryChild.CAT_ID,0);
         Log.e(TAG,"catId="+catId);
         childList= (ArrayList<CategoryChildBean>) getIntent().getSerializableExtra("childList");
         if(catId<0){
@@ -171,6 +172,8 @@ public class CategoryChildActivity extends Activity {
     }
 
     private void initView() {
+//        String name= getIntent().getStringExtra(D.Boutique.KEY_NAME);
+        DisplayUtils.initBack(mContext);
         mSwipeRefreshLayout= (SwipeRefreshLayout)findViewById(R.id.srl_category_details);
         mSwipeRefreshLayout.setColorSchemeColors(
                 R.color.google_blue,
