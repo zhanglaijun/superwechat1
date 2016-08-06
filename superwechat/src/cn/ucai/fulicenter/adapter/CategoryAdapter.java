@@ -120,7 +120,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     mContext.startActivity(new Intent(mContext, CategoryChildActivity.class)
-                    .putExtra(I.NewAndBoutiqueGood.CAT_ID,child.getId())
+                    .putExtra(I.CategoryChild.CAT_ID,child.getId())
                     .putExtra(I.CategoryGroup.NAME,mGroupList.get(groupPosition).getName())
                     .putExtra("childList",mChildList.get(groupPosition)));
                 }

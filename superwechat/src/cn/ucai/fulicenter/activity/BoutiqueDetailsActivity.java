@@ -21,6 +21,7 @@ import cn.ucai.fulicenter.bean.NewGoodBean;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.utils.I;
 import cn.ucai.fulicenter.utils.Utils;
+import cn.ucai.fulicenter.viewholder.DisplayUtils;
 
 public class BoutiqueDetailsActivity extends Activity {
     private final static String TAG=BoutiqueDetailsActivity.class.getCanonicalName();
@@ -159,6 +160,8 @@ public class BoutiqueDetailsActivity extends Activity {
     }
 
     private void initView() {
+        String name= getIntent().getStringExtra(D.Boutique.KEY_NAME);
+        DisplayUtils.initBackWithTitle(mContext,name);
         mSwipeRefreshLayout= (SwipeRefreshLayout)findViewById(R.id.srl_boutique_details);
         mSwipeRefreshLayout.setColorSchemeColors(
                 R.color.google_blue,

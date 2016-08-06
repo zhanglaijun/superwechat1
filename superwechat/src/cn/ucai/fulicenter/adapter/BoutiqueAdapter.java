@@ -81,7 +81,7 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View v) {
                     mContext.startActivity(new Intent(mContext,BoutiqueDetailsActivity.class)
                     .putExtra(D.Boutique.KEY_GOODS_ID,boutique.getId())
-                    );
+                    .putExtra(D.Boutique.KEY_NAME,boutique.getName()) );
 
                 }
             });
