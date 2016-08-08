@@ -21,6 +21,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cn.ucai.fulicenter.activity.CollectActivity;
 import cn.ucai.fulicenter.activity.FuliCenterActivity;
 import cn.ucai.fulicenter.activity.SettingsActivity;
 import cn.ucai.fulicenter.bean.UserAvatar;
@@ -70,6 +71,7 @@ public class PersonalCenterFragment extends Fragment {
         MyClickListener listener=new MyClickListener();
         mtvSetting.setOnClickListener(listener);
         layoutUserCenter.setOnClickListener(listener);
+        layoutCollect.setOnClickListener(listener);
         updateCollectCountListener();
     }
     class MyClickListener implements View.OnClickListener{
@@ -81,6 +83,9 @@ public class PersonalCenterFragment extends Fragment {
                     case R.id.tv_center_setting:
                     case R.id.center_user_info:
                         startActivity(new Intent(mContext, SettingsActivity.class));
+                        break;
+                    case R.id.layout_center_collect:
+                        startActivity(new Intent(mContext, CollectActivity.class));
                         break;
                 }
             }
