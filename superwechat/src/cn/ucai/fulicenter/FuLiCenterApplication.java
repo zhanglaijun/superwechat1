@@ -46,9 +46,9 @@ public class FuLiCenterApplication extends Application {
 
         /**
          * this function will initialize the HuanXin SDK
-         * 
+         *
          * @return boolean true if caller can continue to call HuanXin related APIs after calling onInit, otherwise false.
-         * 
+         *
          * 环信初始化SDK帮助函数
          * 返回true如果正确初始化，否则false，如果返回为false，请在后续的调用中不要调用任何和环信相关的代码
          * 
@@ -122,6 +122,7 @@ public class FuLiCenterApplication extends Application {
 	private Map<String, UserAvatar> userMap = new HashMap<String, UserAvatar>();
     /**全局的群组成员集合*/
     private Map<String,HashMap<String,MemberUserAvatar>>memberMap=new HashMap<String, HashMap<String, MemberUserAvatar>>();
+    private int collectCount;
 
 
 	public Map<String, UserAvatar> getUserMap() {
@@ -156,6 +157,14 @@ public class FuLiCenterApplication extends Application {
 
     public void setMemberMap(Map<String, HashMap<String, MemberUserAvatar>> memberMap) {
         this.memberMap = memberMap;
+    }
+
+    public int getCollectCount() {
+        return collectCount;
+    }
+
+    public void setCollectCount(int collectCount) {
+        this.collectCount = collectCount;
     }
 }
 

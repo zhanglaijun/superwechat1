@@ -1,9 +1,13 @@
 package cn.ucai.fulicenter;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +23,8 @@ import java.util.HashMap;
 
 import cn.ucai.fulicenter.activity.FuliCenterActivity;
 import cn.ucai.fulicenter.activity.SettingsActivity;
+import cn.ucai.fulicenter.bean.UserAvatar;
+import cn.ucai.fulicenter.utils.UserUtils;
 
 
 /**
@@ -47,14 +53,24 @@ public class PersonalCenterFragment extends Fragment {
         mContext= (FuliCenterActivity) getContext();
         View layout=View.inflate(mContext,R.layout.fragment_personal_center,null);
         initView(layout);
+        initData();
         setListener();
         return layout;
+    }
+
+    private void initData() {
+        if(DemoHXSDKHelper.getInstance().isLogined()){
+            UserAvatar user = FuLiCenterApplication.getInstance().getUser();
+            UserUtils.setAppCurrentUserNick(mtvUserName);
+            UserUtils.setAppCurrentUserAvatar(mContext,mivUserAvatar);
+        }
     }
 
     private void setListener() {
         MyClickListener listener=new MyClickListener();
         mtvSetting.setOnClickListener(listener);
         layoutUserCenter.setOnClickListener(listener);
+        updateCollectCountListener();
     }
     class MyClickListener implements View.OnClickListener{
 
@@ -106,5 +122,25 @@ public class PersonalCenterFragment extends Fragment {
                 new String[]{"order"},new int[]{R.id.iv_order});
         gvOrderList.setAdapter(adapter);
     }
+    class UpdateCollectCountReceiver extends BroadcastReceiver{
 
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int count=FuLiCenterApplication.getInstance().getCollectCount();
+            Log.e(TAG,"count="+count);
+            mtvCollectCount.setText(String.valueOf(count));
+        }
+    }
+    UpdateCollectCountReceiver mReceiver;
+    private void updateCollectCountListener(){
+        mReceiver=new UpdateCollectCountReceiver();
+        IntentFilter filter=new IntentFilter("update_collect");
+        mContext.registerReceiver(mReceiver,filter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mContext.unregisterReceiver(mReceiver);
+    }
 }

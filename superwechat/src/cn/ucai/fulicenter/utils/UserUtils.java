@@ -107,9 +107,8 @@ public class UserUtils {
         StringBuilder path = new StringBuilder(I.SERVER_TOOL);
         path.append(I.QUESTION).append(I.KEY_REQUEST)
                 .append(I.EQUALS).append(I.REQUEST_DOWNLOAD_AVATAR)
-                .append(I.AND).append(I.NAME_OR_HXID).append(I.EQUALS)
-                .append(username).append(I.AND).append(I.AVATAR_TYPE)
-                .append(I.EQUALS).append(I.AVATAR_TYPE_USER_PATH);
+                .append(I.AND)
+                .append(I.AVATAR_TYPE).append(I.EQUALS).append(username);
         return path.toString();
     }
 
