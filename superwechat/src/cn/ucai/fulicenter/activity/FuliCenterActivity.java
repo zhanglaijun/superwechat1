@@ -139,16 +139,22 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==ACTION_LOGIN){
+            if(DemoHXSDKHelper.getInstance().isLogined()){
+                index=4;
+            }
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        if(DemoHXSDKHelper.getInstance().isLogined()){
-//              startActivity(new Intent(this, PersonalCenterFragment.class));
-        }else {
-            index=currentTabIndex;
-            if(index==4){
-                index=0;
-            }
-            setFragment();
+        if(DemoHXSDKHelper.getInstance().isLogined()&&index==4){
+            index=0;
         }
+        setFragment();
+        index=currentTabIndex;
     }
 }
