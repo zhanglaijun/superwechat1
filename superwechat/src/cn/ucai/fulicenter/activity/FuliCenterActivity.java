@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 
+import cn.ucai.fulicenter.PersonalCenterFragment;
 import cn.ucai.fulicenter.R;
 
 public class FuliCenterActivity extends BaseActivity implements View.OnClickListener{
@@ -16,6 +17,7 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
     CategoryFragment mCategoryFragment;
+    PersonalCenterFragment mPersonalCenterFragment;
     private Fragment[] fragments;
     int index;
     int currentTabIndex;
@@ -50,20 +52,25 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
                 .add(R.id.layout,mNewGoodsFragment)
                 .add(R.id.layout,mBoutiqueFragment)
                 .add(R.id.layout,mCategoryFragment)
+//                .add(R.id.layout,mPersonalCenterFragment)
                 .hide(mBoutiqueFragment).hide(mCategoryFragment)
+//                .hide(mPersonalCenterFragment)
                 .show(mNewGoodsFragment)
                 .commit();
 
     }
 
     private void initFragment() {
-        fragments=new Fragment[4];
+        fragments=new Fragment[5];
         mNewGoodsFragment=new NewGoodsFragment();
         mBoutiqueFragment=new BoutiqueFragment();
         mCategoryFragment=new CategoryFragment();
+        mPersonalCenterFragment=new PersonalCenterFragment();
         fragments[0] =  mNewGoodsFragment;
         fragments[1] =  mBoutiqueFragment;
         fragments[2]=mCategoryFragment;
+        fragments[4]=mPersonalCenterFragment;
+
     }
 
     public void onClick(View v){
