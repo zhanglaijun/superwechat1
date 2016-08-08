@@ -1,6 +1,7 @@
 package cn.ucai.fulicenter;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.ucai.fulicenter.activity.FuliCenterActivity;
+import cn.ucai.fulicenter.activity.SettingsActivity;
 
 
 /**
@@ -45,7 +47,28 @@ public class PersonalCenterFragment extends Fragment {
         mContext= (FuliCenterActivity) getContext();
         View layout=View.inflate(mContext,R.layout.fragment_personal_center,null);
         initView(layout);
+        setListener();
         return layout;
+    }
+
+    private void setListener() {
+        MyClickListener listener=new MyClickListener();
+        mtvSetting.setOnClickListener(listener);
+        layoutUserCenter.setOnClickListener(listener);
+    }
+    class MyClickListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            if(DemoHXSDKHelper.getInstance().isLogined()){
+                switch (v.getId()){
+                    case R.id.tv_center_setting:
+                    case R.id.center_user_info:
+                        startActivity(new Intent(mContext, SettingsActivity.class));
+                        break;
+                }
+            }
+        }
     }
 
     private void initView(View layout) {

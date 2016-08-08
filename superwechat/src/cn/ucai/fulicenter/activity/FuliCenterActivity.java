@@ -52,9 +52,8 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
                 .add(R.id.layout,mNewGoodsFragment)
                 .add(R.id.layout,mBoutiqueFragment)
                 .add(R.id.layout,mCategoryFragment)
-//                .add(R.id.layout,mPersonalCenterFragment)
-                .hide(mBoutiqueFragment).hide(mCategoryFragment)
-//                .hide(mPersonalCenterFragment)
+                .add(R.id.layout,mPersonalCenterFragment)
+                .hide(mBoutiqueFragment).hide(mCategoryFragment).hide(mPersonalCenterFragment)
                 .show(mNewGoodsFragment)
                 .commit();
 
