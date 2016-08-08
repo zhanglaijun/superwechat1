@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 
+import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.PersonalCenterFragment;
 import cn.ucai.fulicenter.R;
 
@@ -21,6 +23,7 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
     private Fragment[] fragments;
     int index;
     int currentTabIndex;
+    public static final int ACTION_LOGIN=100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,10 +95,19 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
                 index = 3;
                 break;
             case R.id.btnContact:
-                setDrawable(mbtnContact,R.drawable.menu_item_personal_center_selected, Color.BLACK);
-                index = 4;
+                setDrawable(mbtnContact, R.drawable.menu_item_personal_center_selected, Color.BLACK);
+                if(DemoHXSDKHelper.getInstance().isLogined()) {
+                    index = 4;
+                }else {
+                    gotoLogin();
+                }
                 break;
         }
+        setFragment();
+
+    }
+
+    private void setFragment() {
         if (currentTabIndex != index) {
             FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
             trx.hide(fragments[currentTabIndex]);
@@ -105,7 +117,10 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
             trx.show(fragments[index]).commit();
             currentTabIndex = index;
         }
+    }
 
+    private void gotoLogin() {
+        startActivityForResult(new Intent(this,LoginActivity.class),ACTION_LOGIN);
     }
 
 
@@ -123,4 +138,17 @@ public class FuliCenterActivity extends BaseActivity implements View.OnClickList
         button.setCompoundDrawables(null,drawable,null,null);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(DemoHXSDKHelper.getInstance().isLogined()){
+//              startActivity(new Intent(this, PersonalCenterFragment.class));
+        }else {
+            index=currentTabIndex;
+            if(index==4){
+                index=0;
+            }
+            setFragment();
+        }
+    }
 }
