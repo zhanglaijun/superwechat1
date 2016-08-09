@@ -1,7 +1,9 @@
 package cn.ucai.fulicenter.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -9,10 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.ucai.fulicenter.D;
+import cn.ucai.fulicenter.DemoHXSDKHelper;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.AlbumBean;
 import cn.ucai.fulicenter.bean.GoodDetailsBean;
+import cn.ucai.fulicenter.bean.MessageBean;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
+import cn.ucai.fulicenter.task.DownloadCollectCountTask;
 import cn.ucai.fulicenter.utils.I;
 import cn.ucai.fulicenter.viewholder.DisplayUtils;
 import cn.ucai.fulicenter.viewholder.FlowIndicator;
@@ -36,12 +42,19 @@ private static final String TAG=GoodDetailsActivity.class.getCanonicalName();
 
     int mGoodId;
     GoodDetailsBean mGoodDetail;
+    boolean isCollect;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_good_details);
         initView();
         initData();
+        setListener();
+    }
+
+    private void setListener() {
+        MyOnClickListener listener=new MyOnClickListener();
+        ivCollect.setOnClickListener(listener);
     }
 
     private void initData() {
@@ -128,5 +141,89 @@ private static final String TAG=GoodDetailsActivity.class.getCanonicalName();
         WebSettings settings=wvGoodBrief.getSettings();
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         settings.setBuiltInZoomControls(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initCollectStatus();
+    }
+
+    private void initCollectStatus() {
+        if(DemoHXSDKHelper.getInstance().isLogined()){
+            String userName= FuLiCenterApplication.getInstance().getUserName();
+            OkHttpUtils2<MessageBean>utils2=new OkHttpUtils2<>();
+            utils2.setRequestUrl(I.REQUEST_IS_COLLECT)
+                    .addParam(I.Collect.USER_NAME,userName)
+                    .addParam(I.Collect.GOODS_ID,mGoodId+"")
+                    .targetClass(MessageBean.class)
+                    .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
+                        @Override
+                        public void onSuccess(MessageBean result) {
+                            Log.e(TAG,"result="+result);
+                            if(result!=null&&result.isSuccess()){
+                                isCollect=true;
+                            }else {
+                                isCollect=false;
+                            }
+                            updateCollectStatus();
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Log.e(TAG,"error="+error);
+                        }
+                    });
+        }
+    }
+    class MyOnClickListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.iv_good_collect:
+                    goodCollect();
+                    break;
+            }
+        }
+    }
+    private void goodCollect(){
+        if(DemoHXSDKHelper.getInstance().isLogined()){
+            if(isCollect){
+                OkHttpUtils2<MessageBean>utils2=new OkHttpUtils2<>();
+                utils2.setRequestUrl(I.REQUEST_DELETE_COLLECT)
+                        .addParam(I.Collect.USER_NAME,FuLiCenterApplication.getInstance().getUserName())
+                        .addParam(I.Collect.GOODS_ID,mGoodId+"")
+                        .targetClass(MessageBean.class)
+                        .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
+                            @Override
+                            public void onSuccess(MessageBean result) {
+                                if(result!=null&&result.isSuccess()){
+                                    isCollect=false;
+                                    new DownloadCollectCountTask(GoodDetailsActivity.this,FuLiCenterApplication.getInstance().getUserName());
+                                }else {
+                                    Log.e(TAG,"delete fail");
+                                }
+                                updateCollectStatus();
+                                Toast.makeText(GoodDetailsActivity.this,result.getMsg(),Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onError(String error) {
+
+                            }
+                        });
+
+            }
+        }else {
+            startActivity(new Intent(GoodDetailsActivity.this,LoginActivity.class));
+        }
+    }
+    private void updateCollectStatus(){
+        if(isCollect){
+            ivCollect.setImageResource(R.drawable.bg_collect_out);
+        }else {
+            ivCollect.setImageResource(R.drawable.bg_collect_in);
+        }
     }
 }
