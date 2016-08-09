@@ -200,12 +200,14 @@ private static final String TAG=GoodDetailsActivity.class.getCanonicalName();
                             public void onSuccess(MessageBean result) {
                                 if(result!=null&&result.isSuccess()){
                                     isCollect=false;
-                                    new DownloadCollectCountTask(GoodDetailsActivity.this,FuLiCenterApplication.getInstance().getUserName());
+                                    new DownloadCollectCountTask(GoodDetailsActivity.this,FuLiCenterApplication.getInstance().getUserName()).getContacts();
+                                    sendStickyBroadcast(new Intent("update_collect_list"));
                                 }else {
                                     Log.e(TAG,"delete fail");
                                 }
                                 updateCollectStatus();
                                 Toast.makeText(GoodDetailsActivity.this,result.getMsg(),Toast.LENGTH_SHORT).show();
+
                             }
 
                             @Override
@@ -214,6 +216,37 @@ private static final String TAG=GoodDetailsActivity.class.getCanonicalName();
                             }
                         });
 
+            }else {
+                OkHttpUtils2<MessageBean>utils2=new OkHttpUtils2<>();
+                utils2.setRequestUrl(I.REQUEST_ADD_COLLECT)
+                        .addParam(I.Collect.USER_NAME,FuLiCenterApplication.getInstance().getUserName())
+                        .addParam(I.Collect.GOODS_ID,mGoodDetail.getGoodsId()+"")
+                        .addParam(I.Collect.ADD_TIME,mGoodDetail.getAddTime()+"")
+                        .addParam(I.Collect.GOODS_ENGLISH_NAME,mGoodDetail.getGoodsEnglishName())
+                        .addParam(I.Collect.GOODS_IMG,mGoodDetail.getGoodsImg())
+                        .addParam(I.Collect.GOODS_THUMB,mGoodDetail.getGoodsThumb())
+                        .addParam(I.Collect.GOODS_NAME,mGoodDetail.getGoodsName())
+                        .targetClass(MessageBean.class)
+                        .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
+                            @Override
+                            public void onSuccess(MessageBean result) {
+                                if(result!=null&&result.isSuccess()){
+                                    isCollect=true;
+                                    new DownloadCollectCountTask(GoodDetailsActivity.this,FuLiCenterApplication.getInstance().getUserName()).getContacts();
+                                    sendStickyBroadcast(new Intent("update_collect_list"));
+                                }else {
+                                    Log.e(TAG,"delete fail");
+                                }
+                                updateCollectStatus();
+                                Toast.makeText(GoodDetailsActivity.this,result.getMsg(),Toast.LENGTH_SHORT).show();
+//                                mContext.sendStickyBroadcast(new Intent("update_collect"));
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                Log.e(TAG,"error="+error);
+                            }
+                        });
             }
         }else {
             startActivity(new Intent(GoodDetailsActivity.this,LoginActivity.class));

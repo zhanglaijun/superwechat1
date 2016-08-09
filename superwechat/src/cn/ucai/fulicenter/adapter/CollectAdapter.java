@@ -107,7 +107,7 @@ public class CollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                             Log.e(TAG,"result="+result);
                                             if(result!=null&&result.isSuccess()){
                                                 mCollectList.remove(collect);
-                                                new DownloadCollectCountTask(mContext,FuLiCenterApplication.getInstance().getUserName());
+                                                new DownloadCollectCountTask(mContext,FuLiCenterApplication.getInstance().getUserName()).getContacts();
                                                 notifyDataSetChanged();
                                             }else {
                                                 Log.e(TAG,"delete fail");
