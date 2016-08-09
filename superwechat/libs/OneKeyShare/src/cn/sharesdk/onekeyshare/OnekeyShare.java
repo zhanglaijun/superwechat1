@@ -8,20 +8,22 @@
 
 package cn.sharesdk.onekeyshare;
 
-import static com.mob.tools.utils.BitmapHelper.captureView;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import com.mob.tools.utils.R;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
-import com.mob.tools.utils.R;
+
+import static com.mob.tools.utils.BitmapHelper.captureView;
 
 /**
 * 快捷分享的入口

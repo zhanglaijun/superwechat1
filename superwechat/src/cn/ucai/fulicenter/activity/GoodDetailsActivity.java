@@ -218,7 +218,7 @@ private static final String TAG=GoodDetailsActivity.class.getCanonicalName();
 
                             @Override
                             public void onError(String error) {
-
+                                Log.e(TAG,"error="+error);
                             }
                         });
 
