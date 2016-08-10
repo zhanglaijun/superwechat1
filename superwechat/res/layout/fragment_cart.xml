@@ -57,6 +57,14 @@
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
-
+<TextView
+    android:id="@+id/tv_noting"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="50dp"
+    android:gravity="center_vertical|center_horizontal"
+    android:text="购物车空空如也"
+    android:textSize="18sp"
+    android:textColor="@color/orange"/>
 
 </LinearLayout>
