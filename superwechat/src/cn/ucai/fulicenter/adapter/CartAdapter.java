@@ -70,7 +70,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 }
             });
             mCartViewHolder.ivCartAdd.setOnClickListener(new ChangeCountListener(cart,1));
-            mCartViewHolder.ivCartAdd.setOnClickListener(new ChangeCountListener(cart,-1));
+            mCartViewHolder.ivCartDel.setOnClickListener(new ChangeCountListener(cart,-1));
         }
 
     }
