@@ -104,7 +104,7 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-//        return mBoutiqueList !=null? mBoutiqueList.size()+1:1;
+//        return mCartList !=null? mCartList.size()+1:1;
         return mBoutiqueList !=null? mBoutiqueList.size():0;
     }
     public void initData(ArrayList<BoutiqueBean>list){
