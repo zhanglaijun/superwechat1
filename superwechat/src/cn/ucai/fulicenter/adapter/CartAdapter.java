@@ -20,6 +20,7 @@ import cn.ucai.fulicenter.utils.ImageUtils;
  * Created by Administrator on 2016/8/1.
  */
 public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    private static final String TAG=CartAdapter.class.getCanonicalName();
     Context mContext;
     List<CartBean> mCartList;
     CartViewHolder mCartViewHolder;
@@ -53,11 +54,12 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             mCartViewHolder = (CartViewHolder) holder;
             final CartBean cart= mCartList.get(position);
             mCartViewHolder.cbCartSelected.setChecked(cart.isChecked());
-            ImageUtils.setGoodThumb(mContext, mCartViewHolder.ivCartThumb,cart.getGoods().getGoodsThumb());
-            mCartViewHolder.tvCartGoodName.setText(cart.getGoods().getGoodsName());
-            mCartViewHolder.tvCartCount.setText("("+cart.getCount()+")");
-            mCartViewHolder.tvCartPrice.setText(cart.getGoods().getCurrencyPrice());
-
+            if(cart.getGoods()!=null) {
+                ImageUtils.setGoodThumb(mContext, mCartViewHolder.ivCartThumb, cart.getGoods().getGoodsThumb());
+                mCartViewHolder.tvCartGoodName.setText(cart.getGoods().getGoodsName());
+                mCartViewHolder.tvCartCount.setText("(" + cart.getCount() + ")");
+                mCartViewHolder.tvCartPrice.setText(cart.getGoods().getCurrencyPrice());
+                }
         }
 
     }
@@ -89,7 +91,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             ivCartThumb = (ImageView) itemView.findViewById(R.id.iv_cart_thumb);
             tvCartGoodName= (TextView) itemView.findViewById(R.id.tv_cart_good_name);
             tvCartCount = (TextView) itemView.findViewById(R.id.tv_cart_count);
-            tvCartPrice= (TextView) itemView.findViewById(R.id.tvBoutiqueTitle);
+            tvCartPrice= (TextView) itemView.findViewById(R.id.tv_cart_price);
             cbCartSelected= (CheckBox) itemView.findViewById(R.id.cb_cart_selected);
             ivCartAdd= (ImageView) itemView.findViewById(R.id.iv_cart_add);
             ivCartDel= (ImageView) itemView.findViewById(R.id.iv_cart_del);
