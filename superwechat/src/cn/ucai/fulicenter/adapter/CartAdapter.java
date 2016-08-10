@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -68,7 +67,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 //        return mCartList !=null? mCartList.size()+1:1;
         return mCartList !=null? mCartList.size():0;
     }
-    public void initData(ArrayList<CartBean>list){
+    public void initData(List<CartBean>list){
         if(mCartList !=null){
             mCartList.clear();
         }
@@ -76,19 +75,17 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         notifyDataSetChanged();
     }
 
-    public void addItem(ArrayList<CartBean> list) {
+    public void addItem(List<CartBean> list) {
         mCartList.addAll(list);
         notifyDataSetChanged();
     }
 
     class CartViewHolder extends RecyclerView.ViewHolder{
-        RelativeLayout layout;
         ImageView ivCartThumb,ivCartAdd,ivCartDel;
         CheckBox cbCartSelected;
         TextView tvCartGoodName, tvCartCount,tvCartPrice;
         public CartViewHolder(View itemView) {
             super(itemView);
-//            layout= (RelativeLayout) itemView.findViewById(R.id.layout_cart_item);
             ivCartThumb = (ImageView) itemView.findViewById(R.id.iv_cart_thumb);
             tvCartGoodName= (TextView) itemView.findViewById(R.id.tv_cart_good_name);
             tvCartCount = (TextView) itemView.findViewById(R.id.tv_cart_count);
