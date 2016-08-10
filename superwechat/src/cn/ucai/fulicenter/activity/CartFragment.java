@@ -134,7 +134,6 @@ public class CartFragment extends Fragment {
             if (mCartList.size() < I.PAGE_SIZE_DEFAULT) {
                 mAdapter.setMore(false);
             }
-            sumPrice();
             tvNothing.setVisibility(View.GONE);
             mSwipeRefreshLayout.setVisibility(View.VISIBLE);
         } else {
@@ -142,6 +141,7 @@ public class CartFragment extends Fragment {
             tvNothing.setVisibility(View.VISIBLE);
             mSwipeRefreshLayout.setVisibility(View.GONE);
         }
+        sumPrice();
     }
 
     private void initView(View layout) {
@@ -176,6 +176,7 @@ public class CartFragment extends Fragment {
     private void setUpdateCartListener(){
         mReceiver=new UpdateCartReceiver();
         IntentFilter filter=new IntentFilter("update_cart_list");
+        filter.addAction("update_user");
         mContext.registerReceiver(mReceiver,filter);
     }
 

@@ -61,6 +61,21 @@ public class UpdateCartTask {
             }
         }else {
             //新增购物车数量
+            addCart(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
+                @Override
+                public void onSuccess(MessageBean result) {
+                    if(result!=null&&result.isSuccess()){
+                        mCart.setId(Integer.valueOf(result.getMsg()));
+                        cartList.add(mCart);
+                        mContext.sendStickyBroadcast(new Intent("update_cart_list"));
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+            });
         }
     }
     private void updateCart(OkHttpUtils2.OnCompleteListener<MessageBean>listener){
