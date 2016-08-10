@@ -134,9 +134,9 @@ public class CartFragment extends Fragment {
             if (mCartList.size() < I.PAGE_SIZE_DEFAULT) {
                 mAdapter.setMore(false);
             }
+            sumPrice();
             tvNothing.setVisibility(View.GONE);
             mSwipeRefreshLayout.setVisibility(View.VISIBLE);
-            sumPrice();
         } else {
             mAdapter.setMore(false);
             tvNothing.setVisibility(View.VISIBLE);
@@ -195,11 +195,11 @@ public class CartFragment extends Fragment {
                GoodDetailsBean good=cart.getGoods();
                if(good!=null&&cart.isChecked()){
                    sumPrice+=convertPrice(good.getCurrencyPrice())*cart.getCount();
-                   rankPrice+=convertPrice(good.getPromotePrice())*cart.getCount();
+                   rankPrice+=convertPrice(good.getRankPrice())*cart.getCount();
                }
            }
            tvSumPrice.setText("合计:￥"+sumPrice);
-                   tvSavePrice.setText("节省:￥"+(sumPrice-rankPrice));
+           tvSavePrice.setText("节省:￥"+(sumPrice-rankPrice));
        }else {
            tvSumPrice.setText("合计:￥00.00");
            tvSavePrice.setText("节省:￥00.00");
