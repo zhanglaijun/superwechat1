@@ -285,7 +285,7 @@ private static final String TAG=GoodDetailsActivity.class.getCanonicalName();
                                 }
                                 updateCollectStatus();
                                 Toast.makeText(GoodDetailsActivity.this,result.getMsg(),Toast.LENGTH_SHORT).show();
-//                                mContext.sendStickyBroadcast(new Intent("update_collect"));
+                                mContext.sendStickyBroadcast(new Intent("update_collect"));
                             }
 
                             @Override
