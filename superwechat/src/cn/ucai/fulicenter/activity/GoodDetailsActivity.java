@@ -214,6 +214,8 @@ private static final String TAG=GoodDetailsActivity.class.getCanonicalName();
         boolean isExits=false;
         for(CartBean cartBean:cartList){
             if(cartBean.getGoodsId()==mGoodId){
+                cart.setId(cartBean.getId());
+                cart.setGoodsId(mGoodId);
                 cart.setChecked(cartBean.isChecked());
                 cart.setCount(cartBean.getCount()+1);
                 cart.setGoods(mGoodDetail);
@@ -222,6 +224,7 @@ private static final String TAG=GoodDetailsActivity.class.getCanonicalName();
             }
         }
         if(!isExits){
+            cart.setGoodsId(mGoodId);
             cart.setChecked(true);
             cart.setCount(1);
             cart.setGoods(mGoodDetail);

@@ -67,7 +67,7 @@ public class UpdateCartTask {
                     if(result!=null&&result.isSuccess()){
                         mCart.setId(Integer.valueOf(result.getMsg()));
                         cartList.add(mCart);
-                        mContext.sendStickyBroadcast(new Intent("update_cart_list"));
+//                        mContext.sendStickyBroadcast(new Intent("update_cart_list"));
                     }
                 }
 
