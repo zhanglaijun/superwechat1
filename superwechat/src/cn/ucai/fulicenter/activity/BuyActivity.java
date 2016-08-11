@@ -13,7 +13,7 @@ public class BuyActivity extends Activity {
     BuyActivity mContext;
     EditText edOrderName,edOrderPhone,edOrderStreet;
     Spinner spinProvince;
-    Button mJ;
+    Button btnBuy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +28,7 @@ public class BuyActivity extends Activity {
         edOrderPhone= (EditText) findViewById(R.id.et_address_tel);
         edOrderStreet= (EditText) findViewById(R.id.et_address_street);
         spinProvince= (Spinner) findViewById(R.id.spi_address_city);
-        mJ= (Button) findViewById(R.id.btn_address);
+        btnBuy= (Button) findViewById(R.id.btn_address);
     }
 
 }
